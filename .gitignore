@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Virtual Environment
+venv/
+.env
+
+# VS Code
+.vscode/
+
+# Django migrations
+*/migrations/
