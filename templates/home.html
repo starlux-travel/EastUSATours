@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block title %} 首頁 - {{
+site_theme.site_name|default:"East USA Tours" }} {% endblock %} {% block content
+%}
+<!-- Hero Banner 區塊 -->
+<section
+  class="hero-banner text-center text-white py-5"
+  style="background: url('{{ site_theme.homepage_banner.url }}') center/cover no-repeat;"
+>
+  <div class="container">
+    <h1 class="display-4 fw-bold">{{ site_theme.site_name }}</h1>
+    <p class="lead">美國旅遊首選，一站式行程預約好！</p>
+    <a href="#" class="btn btn-primary btn-lg mt-3">立即預訂</a>
+  </div>
+</section>
+
+<!-- 搜尋器區塊 -->
+<section class="py-5 bg-light border-top border-bottom">
+  <div class="container">
+    <form method="get" action="{% url 'search' %}">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="departure" class="form-label">出發地</label>
+          <select name="departure" id="departure" class="form-select">
+            <option value="不限">不限</option>
+            <option value="New York">New York 紐約</option>
+            <option value="Boston">Boston 波士頓</option>
+            <option value="Philadelphia">Philadelphia 費城</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="destination" class="form-label">目的地</label>
+          <input
+            type="text"
+            name="destination"
+            id="destination"
+            placeholder="輸入地點..."
+            class="form-control"
+          />
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-warning w-100">🔍 搜尋</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

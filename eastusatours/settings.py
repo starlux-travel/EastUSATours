@@ -23,9 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret-key-for-dev")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") 
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'eastusatours.onrender.com',
+    'eastusatours.com',
+    'www.eastusatours.com'
+]
+
+
 
 
 # Application definition
@@ -39,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tours',
     'bookings',
+    'config',
 
 ]
 
@@ -57,13 +66,16 @@ ROOT_URLCONF = 'eastusatours.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'config.context_processors.site_theme',
+                
+
             ],
         },
     },
@@ -118,7 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
