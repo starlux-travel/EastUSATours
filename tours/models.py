@@ -33,3 +33,12 @@ class Tour(models.Model):
 
     def __str__(self):
         return self.title
+# tours/models.py 中加入
+from django.db import models
+
+class SiteSetting(models.Model):
+    logo = models.ImageField(upload_to='settings/', blank=True, null=True)
+    white_logo = models.ImageField(upload_to='settings/', blank=True, null=True)
+
+    def __str__(self):
+        return "網站設定"

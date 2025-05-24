@@ -11,7 +11,7 @@ urlpatterns = [
 
 # 靜態媒體（可選）
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # 多語言 admin 翻譯
 admin.site.site_header = _("EastUSA Tours 管理後台")
