@@ -47,9 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tours',
     'bookings',
-    'config',
-
+    'cart',
+    'django_browser_reload',  # 僅開發用，未來上線可移除
 ]
+
+    
+    
+   
+    
+  
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,14 +72,13 @@ ROOT_URLCONF = 'eastusatours.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"], 
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'config.context_processors.site_theme',
                 
 
             ],
@@ -117,14 +122,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hant'  # 預設繁體
 
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
+LANGUAGES = [
+    ('zh-hant', '繁體中文'),
+    ('en', 'English'),
+]
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

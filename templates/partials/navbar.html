@@ -1,0 +1,94 @@
+<header class="bg-white shadow sticky top-0 z-50">
+  <div class="max-w-screen-xl mx-auto flex items-center justify-between px-4 py-3">
+    <!-- LOGO 區塊 -->
+    <a href="/" class="text-2xl font-bold text-primary">
+      {% if site_theme.logo_url %}
+        <img src="{{ site_theme.logo_url }}" alt="Logo" class="h-10" />
+      {% else %}
+        {{ site_theme.site_name|default:"EastUSA Tours" }}
+      {% endif %}
+    </a>
+
+    <!-- 漢堡選單（小螢幕） -->
+    <button class="md:hidden text-2xl" id="mobile-menu-button">
+      ☰
+    </button>
+
+    <!-- 主選單（桌機） -->
+    <nav class="hidden md:flex items-center gap-6 font-medium">
+      <a href="#" class="hover:text-blue-600">美東行程</a>
+      <a href="#" class="hover:text-blue-600">加拿大行程</a>
+      <a href="#" class="hover:text-blue-600">亞洲行程</a>
+      <a href="#" class="hover:text-blue-600">郵輪</a>
+      <a href="#" class="hover:text-blue-600">簽證服務</a>
+
+      <!-- 語系切換 -->
+      <form action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <select name="language" onchange="this.form.submit()" class="border rounded px-2 py-1 text-sm">
+          <option value="zh-hant" {% if LANGUAGE_CODE == 'zh-hant' %}selected{% endif %}>繁體中文</option>
+          <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+        </select>
+      </form>
+
+      <!-- 使用者功能 -->
+      <div class="relative group">
+        <button class="flex items-center gap-1">
+          <i class="bi bi-person-circle text-xl"></i>
+          <span class="text-sm">會員中心</span>
+        </button>
+        <div class="absolute hidden group-hover:block right-0 mt-2 w-48 bg-white border rounded shadow z-20">
+          <ul class="text-sm py-2">
+            {% if user.is_authenticated %}
+              <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">你好, {{ user.username }}</a></li>
+              <li><a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-gray-100">登出</a></li>
+            {% else %}
+              <li><a href="{% url 'login' %}" class="block px-4 py-2 hover:bg-gray-100">登入</a></li>
+              <li><a href="{% url 'signup' %}" class="block px-4 py-2 hover:bg-gray-100">註冊</a></li>
+            {% endif %}
+            <li><a href="/orders/" class="block px-4 py-2 hover:bg-gray-100">訂單查詢</a></li>
+            <li><a href="/wishlist/" class="block px-4 py-2 hover:bg-gray-100">收藏清單</a></li>
+          </ul>
+        </div>
+      </div>
+
+  <!-- 購物車 icon -->
+<a href="{% url 'cart:overview' %}" class="relative text-xl mx-2">
+  <i class="bi bi-cart"></i>
+  {% if cart_count > 0 %}
+    <span class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs px-1">
+      {{ cart_count }}
+    </span>
+  {% endif %}
+</a>
+
+  </div>
+
+  <!-- 小螢幕展開選單 -->
+  <div class="md:hidden hidden px-4 pb-4" id="mobile-menu">
+    <nav class="flex flex-col gap-2">
+      <a href="#" class="hover:text-blue-600">美東行程</a>
+      <a href="#" class="hover:text-blue-600">加拿大行程</a>
+      <a href="#" class="hover:text-blue-600">亞洲行程</a>
+      <a href="#" class="hover:text-blue-600">郵輪</a>
+      <a href="#" class="hover:text-blue-600">簽證服務</a>
+    </nav>
+    <div class="mt-2">
+      <form action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <select name="language" onchange="this.form.submit()" class="w-full border rounded px-2 py-1 text-sm">
+          <option value="zh-hant" {% if LANGUAGE_CODE == 'zh-hant' %}selected{% endif %}>繁體中文</option>
+          <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+        </select>
+      </form>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+  toggle.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+  });
+</script>
