@@ -2,28 +2,23 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.utils.translation import gettext_lazy as _
+from django.conf.urls.i18n import i18n_patterns
+from django.views.generic import RedirectView
 
-# 多語言管理後台標題
-admin.site.site_header = _("EastUSA Tours 管理後台")
-admin.site.site_title = _("EastUSA Tours 系統")
-admin.site.index_title = _("歡迎使用旅遊網站後台")
-
-# 語言切換機制
+# 多語言切換路由
 urlpatterns = [
-    path('i18n/', include('django.conf.urls.i18n')),  # 語言切換 POST 路由
+    path('i18n/', include('django.conf.urls.i18n')),
+    # 主網址自動導向 /zh-hant/
+    path('', RedirectView.as_view(url='/zh-hant/', permanent=True)), 
 ]
 
-# 多語言支援路由（會有 /en/、/zh-hant/ 前綴）
-from django.conf.urls.i18n import i18n_patterns
-
+# 主多語路徑
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
-    path('', include('tours.urls')),  # 主 app 路由
+    path('', include('tours.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
-
 )
 
-# 開發環境靜態媒體處理
+# 靜態/媒體檔案開發時自動加載
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,37 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>{% block title %}EastUSA Tours{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Tailwind & Flowbite -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/flowbite@2.2.1/dist/flowbite.min.js"></script>
-
-    <!-- Bootstrap Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    />
   </head>
-
-  <body class="bg-white text-gray-900">
-    <!-- 語言切換 + 簡體轉換 -->
-    <script src="https://cdn.jsdelivr.net/npm/simptchinese/dist/simptchinese.min.js"></script>
-    <script>
-      if (navigator.language === "zh-CN" || navigator.language === "zh") {
-        SimpChinese.transformToSimplified();
-      }
-    </script>
-
-    <!-- 導覽列 -->
-    {% include "partials/navbar.html" %}
-
-    <!-- 主內容 -->
-    <main class="min-h-screen px-4 py-6">
-      {% block content %}{% endblock %}
-    </main>
-
-    <!-- 頁腳 -->
-    {% include "partials/footer.html" %}
+  <body>
+    <main>{% block content %}{% endblock %}</main>
   </body>
 </html>

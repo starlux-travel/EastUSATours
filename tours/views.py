@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import Tour, TourCategory
 
-def home_view(request, lang='zh-hant'):
+def home_view(request):
+    lang = getattr(request, 'LANGUAGE_CODE', 'zh-hant')  # 取出目前語言
     categories = TourCategory.objects.all().order_by('id')
     category_sections = []
 
@@ -17,10 +18,8 @@ def home_view(request, lang='zh-hant'):
 
     return render(request, "home.html", {
         "category_sections": category_sections,
-        "lang": lang,
+        "lang": lang,  # 一定要這行，template 才能判斷中英文
     })
 
-# === 補上 search view（必須要有，否則會報錯） ===
 def search(request):
-    # 暫時不處理查詢，之後可加關鍵字條件
     return render(request, "search_results.html", {})
