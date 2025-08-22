@@ -3,12 +3,12 @@ from django.urls import path
 from django.shortcuts import render
 from .views import HomeView, member_dashboard
 
-# HTML 首頁（就地定義，不在 views.py 裡）
 def site_home(request):
+    # ✅ 回到用模板渲染
     return render(request, "home.html")
 
 urlpatterns = [
-    # 前台 HTML 首頁
+    # 前台首頁（HTML）
     path("", site_home, name="home"),
 
     # API 首頁（JSON）

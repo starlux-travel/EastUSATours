@@ -6,7 +6,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-please-change")
 DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "eastusatours.com", "www.eastusatours.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "eastusatours.com", "www.eastusatours.com",
+                 "eastusatours.onrender.com"]
 
 # ── App 清單 ───────────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
@@ -19,7 +20,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
 
-    # 第三方
+    # 第三方（若沒用可移除）
     "rest_framework",
 
     # 你的 App
@@ -29,11 +30,11 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
-# ── Middleware（唯一一份，順序正確）──────────────────────────────────────────
+# ── Middleware（LocaleMiddleware 要在 CommonMiddleware 之前）──────────────────
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",   # 在 CommonMiddleware 之前
+    "django.middleware.locale.LocaleMiddleware",     # ← 必須在 CommonMiddleware 之前
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -41,25 +42,14 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# 登入後/登出後導向
+# 登入/登出導向（會自動套在語系前綴底下）
+LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "/account/"
 LOGOUT_REDIRECT_URL = "/"
-LOGIN_URL = "login"   # LoginRequiredMixin 會用到
 
 # ── URL / WSGI ────────────────────────────────────────────────────────────────
 ROOT_URLCONF = "eastusatours.urls"
 WSGI_APPLICATION = "eastusatours.wsgi.application"
-
-# ── Email（開發：輸出到 console）──────────────────────────────────────────────
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-# 正式寄信（備忘）
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = "your@gmail.com"
-# EMAIL_HOST_PASSWORD = "app-password"
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # ── Templates ─────────────────────────────────────────────────────────────────
 TEMPLATES = [
@@ -78,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-# ── DB（本機 SQLite）──────────────────────────────────────────────────────────
+# ── DB（本機用 SQLite；上線改你的 DB）───────────────────────────────────────────
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -94,11 +84,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# ── i18n / l10n（zh-tw / zh-cn / en）──────────────────────────────────────────
+# ── i18n / l10n（網址使用 zh-tw / zh-cn / en）──────────────────────────────────
 USE_I18N = True
 USE_TZ = True
 TIME_ZONE = "UTC"
 
+# 預設語言：繁中台灣；網址也要有前綴（/zh-tw/）
 LANGUAGE_CODE = "zh-tw"
 LANGUAGES = [
     ("zh-tw", "繁體中文（台灣）"),
@@ -107,15 +98,25 @@ LANGUAGES = [
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
+# 讓「預設語言」也帶前綴（/zh-tw/）
+# Django 4.2+ 可用；如無此設定也沒關係，預設為 True
+try:
+    from django.conf.global_settings import PREFIX_DEFAULT_LANGUAGE  # noqa
+    PREFIX_DEFAULT_LANGUAGE = True  # type: ignore
+except Exception:
+    pass
+
+LANGUAGE_COOKIE_NAME = "django_language"
+
 # ── Static / Media ────────────────────────────────────────────────────────────
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# ── 快取（本機記憶體）──────────────────────────────────────────────────────────
+# ── 快取（本機）───────────────────────────────────────────────────────────────
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -124,14 +125,13 @@ CACHES = {
     }
 }
 
-# ── 可配置購物車商品模型 ─────────────────────────────────────────────────────
-CART_PRODUCT_MODEL = "tours.SectionCard"
+# ── 開發用信件（印在 console）───────────────────────────────────────────────────
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# ── DRF ───────────────────────────────────────────────────────────────────────
+# ── DRF（若有用）──────────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [],
     "DEFAULT_AUTHENTICATION_CLASSES": [],
 }
 
-# ── 其他 ───────────────────────────────────────────────────────────────────────
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
