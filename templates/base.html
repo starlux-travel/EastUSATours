@@ -1,10 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <title>{% block title %}EastUSA Tours{% endblock %}</title>
-  </head>
-  <body>
-    <main>{% block content %}{% endblock %}</main>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}EastUSA Tours{% endblock %}</title>
+
+  <!-- Tailwind CDN（方便開發；未做打包時可用） -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- 你的自訂樣式（路徑對，檔名改為 styles.css） -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <main>{% block content %}{% endblock %}</main>
+</body>
 </html>

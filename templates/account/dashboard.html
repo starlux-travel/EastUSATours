@@ -1,0 +1,30 @@
+{% load i18n %}
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{% trans "會員中心" %}</title>
+  <!-- 讓按鈕看起來像文字連結；也可以刪掉這段自行套用你的樣式 -->
+  <style>
+    form.inline { display:inline; }
+    .linklike {
+      background:none; border:0; padding:0; margin:0;
+      color:#2563eb; text-decoration:underline; cursor:pointer; font:inherit;
+    }
+  </style>
+</head>
+<body>
+  <h1>{% trans "會員中心" %}</h1>
+  <p>{% trans "您好" %}，{{ request.user.get_username }}！</p>
+
+  <ul>
+    <li>
+      <!-- 改成 POST + CSRF，避免 405 -->
+      <form method="post" action="{% url 'logout' %}" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="linklike">{% trans "登出" %}</button>
+      </form>
+    </li>
+  </ul>
+</body>
+</html>

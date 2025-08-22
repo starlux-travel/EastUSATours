@@ -1,25 +1,49 @@
+# tours/views.py
+from django.contrib.sites.models import Site
+from django.conf import settings
+from django.core.cache import cache
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import HomeConfig, Channel
+from .serializers import HomePayloadSerializer
+# tours/views.py
 from django.shortcuts import render
-from .models import Tour, TourCategory
+from django.contrib.auth.decorators import login_required
 
-def home_view(request):
-    lang = getattr(request, 'LANGUAGE_CODE', 'zh-hant')  # 取出目前語言
-    categories = TourCategory.objects.all().order_by('id')
-    category_sections = []
+@login_required
+def member_dashboard(request):
+    return render(request, "account/dashboard.html")
 
-    for cat in categories:
-        if lang == "en":
-            tours = Tour.objects.filter(category=cat, is_active=True).only("title_en", "desc_en", "image", "price")[:6]
-        else:
-            tours = Tour.objects.filter(category=cat, is_active=True).only("title_zh_tw", "desc_zh_tw", "image", "price")[:6]
-        category_sections.append({
-            "category": cat,
-            "tours": tours,
-        })
+CACHE_TTL = 60 * 5
 
-    return render(request, "home.html", {
-        "category_sections": category_sections,
-        "lang": lang,  # 一定要這行，template 才能判斷中英文
-    })
 
-def search(request):
-    return render(request, "search_results.html", {})
+def _site_from_request(request):
+    host = request.get_host().split(":")[0]
+    try:
+        return Site.objects.get(domain=host)
+    except Site.DoesNotExist:
+        from django.conf import settings
+        return Site.objects.get(id=getattr(settings, "SITE_ID", 1))
+
+class HomeView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        channel = request.query_params.get("channel", Channel.B2C)
+        site = _site_from_request(request)
+        key = f"home:{site.id}:{channel}"
+        data = cache.get(key)
+        if not data:
+            cfg = (
+                HomeConfig.objects
+                .filter(site=site, channel=channel)
+                .prefetch_related("sections__cards")
+                .first()
+            )
+            if not cfg:
+                return Response({"sections": []})
+            data = HomePayloadSerializer(cfg).data
+            cache.set(key, data, CACHE_TTL)
+        return Response(data)
