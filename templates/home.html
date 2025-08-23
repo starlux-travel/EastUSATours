@@ -1,47 +1,110 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}EastUSA Tours 首頁{% endblock %}
+{% block title %}{% if home.seo_title %}{{ home.seo_title }}{% else %}EastUSA Tours 首頁{% endif %}{% endblock %}
+
+{% block head_extra %}
+  {% if home.seo_description %}<meta name="description" content="{{ home.seo_description }}">{% endif %}
+  {% if home.seo_keywords %}<meta name="keywords" content="{{ home.seo_keywords }}">{% endif %}
+{% endblock %}
 
 {% block content %}
-  <!-- 搜尋區塊 -->
-  <section class="max-w-6xl mx-auto px-4 md:px-6 mt-6">
-    <div class="rounded-2xl shadow-lg bg-white/90 p-6">
-      <div class="text-center">
-        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">探索美東精選行程</h1>
-        <p class="mt-1 text-gray-600">EastUSA Tours ｜ 客製假期・東岸專家</p>
+
+  <!-- Hero 區 -->
+  <section class="w-full">
+    <div class="relative max-w-7xl mx-auto rounded-2xl overflow-hidden mt-6">
+      {% if home.hero_bg_image %}
+        <img src="{{ home.hero_bg_image }}" alt="hero" class="w-full h-64 md:h-80 object-cover">
+      {% else %}
+        <div class="w-full h-64 md:h-80 bg-gradient-to-r from-blue-50 to-white"></div>
+      {% endif %}
+      <div class="absolute inset-0 bg-black/25"></div>
+      <div class="absolute inset-0 flex items-center">
+        <div class="px-4 md:px-8">
+          {% if home.hero_title %}
+            <h1 class="text-2xl md:text-4xl font-extrabold text-white drop-shadow">
+              {{ home.hero_title }}
+            </h1>
+          {% endif %}
+          {% if home.hero_subtitle %}
+            <p class="mt-2 text-white/90 md:text-lg drop-shadow">
+              {{ home.hero_subtitle }}
+            </p>
+          {% endif %}
+        </div>
       </div>
-      <form class="mt-5 grid grid-cols-12 gap-2">
-        <select class="col-span-12 sm:col-span-2 border-gray-200 rounded-md">
-          <option>美東</option><option>美西</option><option>夏威夷</option>
-          <option>加拿大</option><option>歐洲</option><option>亞洲</option>
-        </select>
-        <input class="col-span-12 sm:col-span-5 border-gray-200 rounded-md" placeholder="搜尋地點 / 關鍵字">
-        <input class="col-span-6 sm:col-span-3 border-gray-200 rounded-md" placeholder="年 / 月 / 日">
-        <select class="col-span-4 sm:col-span-1 border-gray-200 rounded-md">
-          <option>2人</option><option>3人</option><option>4人</option>
-        </select>
-        <button class="col-span-2 sm:col-span-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded-md">搜尋</button>
-      </form>
     </div>
   </section>
 
-  <!-- 精選行程 -->
-  <section class="max-w-6xl mx-auto px-4 md:px-6 mt-10">
-    <h2 class="text-2xl font-bold mb-4">精選行程</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl shadow p-4">
-        <img src="{% static 'images/newyork.jpg' %}" class="w-full h-36 object-cover rounded mb-2">
-        <div class="font-bold mb-1">紐約經典五日遊</div>
-        <div class="text-gray-500 text-sm">自由女神、華爾街</div>
-        <div class="text-blue-500 font-bold mt-1">$899 起</div>
+  <!-- Sections -->
+  <section class="max-w-7xl mx-auto px-4 md:px-8 mt-10">
+    {% if home.sections and home.sections|length > 0 %}
+      {% for sec in home.sections %}
+        {% if sec.is_active %}
+          <div class="mb-10">
+            <div class="flex items-end justify-between gap-4 mb-4">
+              <div>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ sec.title }}</h2>
+                {% if sec.subtitle %}
+                  <p class="text-gray-500 text-sm mt-1">{{ sec.subtitle }}</p>
+                {% endif %}
+              </div>
+              {% if sec.more_url %}
+                <a href="{{ sec.more_url }}" class="text-sm text-emerald-700 hover:text-emerald-800 font-semibold">
+                  {{ sec.more_label|default:_("更多") }} →
+                </a>
+              {% endif %}
+            </div>
+
+            {% if sec.show_divider %}
+              <div class="h-px bg-gray-200 mb-4"></div>
+            {% endif %}
+
+            {% with cols=sec.columns|default:3 %}
+              <div class="grid gap-6" style="grid-template-columns: repeat({{ cols }}, minmax(0, 1fr));">
+                {% for card in sec.cards %}
+                  {% if card.is_active %}
+                    <a href="{{ card.link_url|default:'#' }}"
+                       class="group block bg-white rounded-xl shadow hover:shadow-lg overflow-hidden">
+                      <div class="relative h-40 md:h-48 bg-gray-100">
+                        {% if card.image_url %}
+                          <img src="{{ card.image_url }}" alt="{{ card.title }}" class="w-full h-full object-cover">
+                        {% endif %}
+                        {% if card.tag %}
+                          <span class="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+                            {{ card.tag }}
+                          </span>
+                        {% endif %}
+                      </div>
+                      <div class="p-4">
+                        <div class="flex items-center justify-between">
+                          <h3 class="font-semibold text-gray-900 line-clamp-2 group-hover:text-emerald-700">
+                            {{ card.title }}
+                          </h3>
+                          {% if card.price_label %}
+                            <span class="text-emerald-700 font-bold text-sm ml-3 whitespace-nowrap">
+                              {{ card.price_label }}
+                            </span>
+                          {% endif %}
+                        </div>
+                        {% if card.subtitle %}
+                          <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ card.subtitle }}</p>
+                        {% endif %}
+                      </div>
+                    </a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endwith %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="text-center text-gray-500 py-20">
+        {% trans "目前尚未設定首頁內容，請至後台新增 Section 與卡片。" %}
       </div>
-      <div class="bg-white rounded-xl shadow p-4">
-        <img src="{% static 'images/niagara.png' %}" class="w-full h-36 object-cover rounded mb-2">
-        <div class="font-bold mb-1">尼加拉瀑布一日團</div>
-        <div class="text-gray-500 text-sm">暢遊世界大瀑布</div>
-        <div class="text-blue-500 font-bold mt-1">$299 起</div>
-      </div>
-    </div>
+    {% endif %}
   </section>
+
 {% endblock %}
