@@ -1,48 +1,19 @@
-{% load i18n %}
-{% load static %}
+<nav class="bg-white shadow">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="/{{ LANGUAGE_CODE }}/" class="text-lg font-bold">East USA Tours</a>
 
-<header class="w-full border-b bg-white shadow-sm">
-  <div class="max-w-6xl mx-auto flex justify-between items-center px-4 h-16">
-    
-    <!-- LOGO -->
-    <a href="/" class="flex items-center gap-2">
-      <img src="{% static 'images/logo.1.png' %}" class="h-8" alt="EastUSA Tours">
-      <span class="text-xl font-bold text-gray-800">EastUSA Tours</span>
-    </a>
+    <div class="flex items-center space-x-4">
+      <!-- 你原有的 menu... -->
 
-    <!-- 導覽選單 -->
-    <nav class="flex items-center gap-6 text-sm font-medium text-gray-700">
-      <a href="/" class="hover:text-blue-600">{% trans "首頁" %}</a>
-      <a href="/tours/" class="hover:text-blue-600">{% trans "行程" %}</a>
-      <a href="/bookings/" class="hover:text-blue-600">{% trans "訂單查詢" %}</a>
-      <a href="/contact/" class="hover:text-blue-600">{% trans "客服中心" %}</a>
-    </nav>
-
-    <!-- 功能區 -->
-    <div class="flex items-center gap-4 text-sm">
-      {% if user.is_authenticated %}
-        <span class="text-gray-600">{% trans "您好，" %} {{ user.username }}</span>
-        <a href="/account/" class="hover:text-blue-600">{% trans "會員中心" %}</a>
-        
-        <!-- 登出（POST 表單，安全方式） -->
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="text-red-500 hover:text-red-600">{% trans "登出" %}</button>
-        </form>
-      {% else %}
-        <a href="{% url 'login' %}" class="hover:text-blue-600">{% trans "登入" %}</a>
-        <a href="{% url 'register' %}" class="hover:text-blue-600">{% trans "註冊" %}</a>
-      {% endif %}
-
-      <!-- 語言切換 -->
-      <form action="{% url 'set_language' %}" method="post" class="inline">
+      <!-- 語言切換器 -->
+      <form action="{% url 'set_language' %}" method="post">
         {% csrf_token %}
-        <select name="language" onchange="this.form.submit()" class="border-gray-300 rounded text-sm">
-          <option value="zh-tw" {% if LANGUAGE_CODE == 'zh-tw' %}selected{% endif %}>繁中</option>
-          <option value="zh-cn" {% if LANGUAGE_CODE == 'zh-cn' %}selected{% endif %}>简中</option>
+        <select name="language" onchange="this.form.submit()" class="border rounded p-1 text-sm">
+          <option value="zh-tw" {% if LANGUAGE_CODE == 'zh-tw' %}selected{% endif %}>繁體中文</option>
+          <option value="zh-cn" {% if LANGUAGE_CODE == 'zh-cn' %}selected{% endif %}>简体中文</option>
           <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
         </select>
       </form>
     </div>
   </div>
-</header>
+</nav>
