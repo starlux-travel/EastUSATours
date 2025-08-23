@@ -1,271 +1,47 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block title %}EastUSA Tours 首頁{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <title>EastUSA Tours 首頁</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .mega-menu { display: none; }
-    .group:hover .mega-menu { display: block; }
-  </style>
-</head>
-<body class="bg-gradient-to-b from-white via-blue-50 to-white min-h-screen flex flex-col">
-
-<header class="w-full border-b bg-white">
-  <div class="max-w-6xl mx-auto flex items-center px-2 md:px-6 h-16">
-    <!-- LOGO -->
-    <div class="flex items-center gap-2 min-w-max">
-      <img src="{% static 'images/logo.1.png' %}" class="h-8" alt="EastUSA Tours">
-      <span class="text-xl font-bold text-gray-800">EastUSA Tours</span>
-    </div>
-    <!-- 置中搜尋器 -->
-    <section class="w-full flex justify-center mt-8 mb-8">
-      <div class="max-w-6xl mx-auto flex items-center px-4 h-16">
-        <select class="border-none focus:ring-0 text-gray-700">
-          <option>美東</option>
-          <option>美西</option>
-          <option>夏威夷</option>
-          <option>加拿大</option>
-          <option>歐洲</option>
-          <option>亞洲</option>
+  <!-- 搜尋區塊 -->
+  <section class="max-w-6xl mx-auto px-4 md:px-6 mt-6">
+    <div class="rounded-2xl shadow-lg bg-white/90 p-6">
+      <div class="text-center">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900">探索美東精選行程</h1>
+        <p class="mt-1 text-gray-600">EastUSA Tours ｜ 客製假期・東岸專家</p>
+      </div>
+      <form class="mt-5 grid grid-cols-12 gap-2">
+        <select class="col-span-12 sm:col-span-2 border-gray-200 rounded-md">
+          <option>美東</option><option>美西</option><option>夏威夷</option>
+          <option>加拿大</option><option>歐洲</option><option>亞洲</option>
         </select>
-        <input type="text" class="flex-1 border-none focus:ring-0" placeholder="搜尋地點/關鍵字"/>
-        <input type="text" class="w-32 border-none focus:ring-0" placeholder="年/月/日"/>
-        <select class="border-none focus:ring-0 text-gray-700">
-          <option>2人</option>
-          <option>3人</option>
-          <option>4人</option>
+        <input class="col-span-12 sm:col-span-5 border-gray-200 rounded-md" placeholder="搜尋地點 / 關鍵字">
+        <input class="col-span-6 sm:col-span-3 border-gray-200 rounded-md" placeholder="年 / 月 / 日">
+        <select class="col-span-4 sm:col-span-1 border-gray-200 rounded-md">
+          <option>2人</option><option>3人</option><option>4人</option>
         </select>
-        <button class="bg-green-500 hover:bg-green-600 text-white font-bold rounded px-4 py-1 ml-2">搜尋</button>
+        <button class="col-span-2 sm:col-span-1 bg-green-500 hover:bg-green-600 text-white font-bold rounded-md">搜尋</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 精選行程 -->
+  <section class="max-w-6xl mx-auto px-4 md:px-6 mt-10">
+    <h2 class="text-2xl font-bold mb-4">精選行程</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl shadow p-4">
+        <img src="{% static 'images/newyork.jpg' %}" class="w-full h-36 object-cover rounded mb-2">
+        <div class="font-bold mb-1">紐約經典五日遊</div>
+        <div class="text-gray-500 text-sm">自由女神、華爾街</div>
+        <div class="text-blue-500 font-bold mt-1">$899 起</div>
       </div>
-    </form>
-    <!-- 功能區 -->
-    <nav class="flex items-center gap-4 text-gray-700 text-sm min-w-max">
-      <a href="#" class="hover:text-blue-600">下載App</a>
-      <a href="#" class="hover:text-blue-600">客服中心</a>
-      <a href="#" class="hover:text-blue-600">我的訂單</a>
-      <a href="#" class="hover:text-blue-600">登入/註冊</a>
-      <a href="#" class="hover:text-blue-600">🌐</a>
-      <a href="#" class="hover:text-blue-600">USD</a>
-    </nav>
-  </div>
-<!-- 手機版九宮格主分類（只在md以下顯示） -->
-<div class="md:hidden px-2 py-4 bg-white border-b">
-  <div class="grid grid-cols-4 gap-3">
-    <a href="#" class="flex flex-col items-center">
-      <img src="{% static 'images/newyork.png' %}" class="h-8" />
-      <span class="text-xs mt-1">美東</span>
-    </a>
-    <a href="#" class="flex flex-col items-center">
-      <img src="{% static 'images/canada.png' %}" class="h-8" />
-      <span class="text-xs mt-1">加拿大</span>
-    </a>
-    <a href="#" class="flex flex-col items-center">
-      <img src="{% static 'images/icons-paris.png' %}" class="h-8" />
-      <span class="text-xs mt-1">歐洲</span>
-    </a>
-    <a href="#" class="flex flex-col items-center">
-      <img src="{% static 'images/cruise.png' %}" class="h-8" />
-      <span class="text-xs mt-1">郵輪</span>
-    </a>
-    <a href="#" class="flex flex-col items-center">
-      <img src="{% static 'images/bus.png' %}" class="h-8" />
-      <span class="text-xs mt-1">包團</span>
-    </a>
-    <a href="#" class="flex flex-col items-center">
-      <img src="{% static 'images/icons8-passport-80.png' %}" class="h-8" />
-      <span class="text-xs mt-1">簽證</span>
-    </a>
-    <a href="#" class="flex flex-col items-center opacity-0">
-      <!-- 空格用，讓排版平均，可再加其他icon -->
-      <img src="{% static 'images/empty.png' %}" class="h-8" />
-      <span class="text-xs mt-1">&nbsp;</span>
-    </a>
-    <a href="#" class="flex flex-col items-center opacity-0">
-      <img src="{% static 'images/empty.png' %}" class="h-8" />
-      <span class="text-xs mt-1">&nbsp;</span>
-    </a>
-  </div>
-</div>
-
-<nav class="bg-white border-b shadow-sm py-2">
-  <div class="max-w-6xl mx-auto flex justify-center">
-    <div class="flex gap-5 md:gap-7">
-      <a href="#" class="flex items-center gap-1 font-bold text-gray-700 hover:text-blue-600">
-        <img src="{% static 'images/newyork.png' %}" class="h-5" />美國旅遊
-      </a>
-      <a href="#" class="flex items-center gap-1 font-bold text-gray-700 hover:text-blue-600">
-        <img src="{% static 'images/canada.png' %}" class="h-5" />加拿大
-      </a>
-      <a href="#" class="flex items-center gap-1 font-bold text-gray-700 hover:text-blue-600">
-        <img src="{% static 'images/icons-paris.png' %}" class="h-5" />歐洲
-      </a>
-      <a href="#" class="flex items-center gap-1 font-bold text-gray-700 hover:text-blue-600">
-        <img src="{% static 'images/cruise.png' %}" class="h-5" />郵輪
-      </a>
-      <a href="#" class="flex items-center gap-1 font-bold text-gray-700 hover:text-blue-600">
-        <img src="{% static 'images/bus.png' %}" class="h-5" />客製包團
-      </a>
-      <a href="#" class="flex items-center gap-1 font-bold text-gray-700 hover:text-blue-600">
-        <img src="{% static 'images/icons8-passport-80.png' %}" class="h-5" />簽證
-      </a>
-    </div>
-  </div>
-</nav>
-
-<!-- Banner+主題內容（跟Header/Tabs同一條線） -->
-<section class="max-w-6xl mx-auto px-2 md:px-6 mt-8">
-  <div class="rounded-2xl shadow-lg bg-white/80 p-6 flex flex-col items-center mb-6">
-    <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">探索美東精選行程</h1>
-    <div class="text-lg text-gray-600">EastUSA Tours｜客製假期・東岸專家</div>
-  </div>
-  <!-- 下方主題卡片區塊略（如原始碼） -->
-</section>
-<!-- 加入 Alpine.js（如已引入可略過） -->
-<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-<section class="max-w-6xl mx-auto px-6 mt-16" x-data="{ tab: 'east' }">
-  <h2 class="text-2xl font-bold mb-4">精選行程</h2>
-  <!-- Tabs 分頁按鈕 -->
-  <div class="flex gap-4 border-b mb-6">
-    <button @click="tab = 'east'" :class="tab === 'east' ? 'border-b-2 border-blue-500 text-blue-700' : 'text-gray-500'" class="pb-2 px-4 font-bold focus:outline-none">美東</button>
-    <button @click="tab = 'west'" :class="tab === 'west' ? 'border-b-2 border-blue-500 text-blue-700' : 'text-gray-500'" class="pb-2 px-4 font-bold focus:outline-none">美西</button>
-    <button @click="tab = 'hawaii'" :class="tab === 'hawaii' ? 'border-b-2 border-blue-500 text-blue-700' : 'text-gray-500'" class="pb-2 px-4 font-bold focus:outline-none">夏威夷</button>
-    <button @click="tab = 'canada'" :class="tab === 'canada' ? 'border-b-2 border-blue-500 text-blue-700' : 'text-gray-500'" class="pb-2 px-4 font-bold focus:outline-none">加拿大</button>
-  </div>
-  <!-- 卡片區塊 -->
-  <div x-show="tab === 'east'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- 美東行程卡片們 -->
-    <div class="bg-white rounded-xl shadow p-4">
-      <img src="{% static 'images/newyork.jpg' %}" class="w-full h-36 object-cover rounded mb-2" alt="紐約經典五日遊">
-      <div class="font-bold mb-1">紐約經典五日遊</div>
-      <div class="text-gray-500 text-sm">自由女神、曼哈頓、華爾街</div>
-      <div class="text-blue-500 font-bold mt-1">$899 起</div>
-    </div>
-    <div class="bg-white rounded-xl shadow p-4">
-      <img src="{% static 'images/niagara.png' %}" class="w-full h-36 object-cover rounded mb-2" alt="尼加拉瓜瀑布一日團">
-      <div class="font-bold mb-1">尼加拉瓜瀑布一日團</div>
-      <div class="text-gray-500 text-sm">暢遊世界大瀑布，含接送</div>
-      <div class="text-blue-500 font-bold mt-1">$299 起</div>
-    </div>
-    <!-- ...更多美東卡片 -->
-  </div>
-  <div x-show="tab === 'west'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- 美西行程卡片們 -->
-    <div class="bg-white rounded-xl shadow p-4">
-      <img src="{% static 'images/vegas.jpg' %}" class="w-full h-36 object-cover rounded mb-2" alt="拉斯維加斯經典四日">
-      <div class="font-bold mb-1">拉斯維加斯經典四日</div>
-      <div class="text-gray-500 text-sm">大峽谷、賭場、秀場表演</div>
-      <div class="text-blue-500 font-bold mt-1">$799 起</div>
-    </div>
-    <!-- ...更多美西卡片 -->
-  </div>
-  <div x-show="tab === 'hawaii'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- 夏威夷行程卡片們 -->
-    <div class="bg-white rounded-xl shadow p-4">
-      <img src="{% static 'images/hawaii.jpg' %}" class="w-full h-36 object-cover rounded mb-2" alt="夏威夷悠閒六日">
-      <div class="font-bold mb-1">夏威夷悠閒六日</div>
-      <div class="text-gray-500 text-sm">珍珠港、火山國家公園</div>
-      <div class="text-blue-500 font-bold mt-1">$1299 起</div>
-    </div>
-    <!-- ...更多夏威夷卡片 -->
-  </div>
-  <div x-show="tab === 'canada'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- 加拿大行程卡片們 -->
-    <div class="bg-white rounded-xl shadow p-4">
-      <img src="{% static 'images/maple.jpg' %}" class="w-full h-36 object-cover rounded mb-2" alt="洛磯山脈經典五日">
-      <div class="font-bold mb-1">洛磯山脈經典五日</div>
-      <div class="text-gray-500 text-sm">班夫國家公園、湖泊美景</div>
-      <div class="text-blue-500 font-bold mt-1">$999 起</div>
-    </div>
-    <!-- ...更多加拿大卡片 -->
-  </div>
-</section>
-
-<!-- 主推區塊：Banner 或主題卡片 -->
-<section class="max-w-6xl mx-auto px-6">
-  <!-- 機+酒自由行 -->
-  <div class="mb-12">
-    <h2 class="text-2xl font-bold text-gray-800 mb-3">機+酒自由行｜彈性選團</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- 卡片1 -->
-      <div class="bg-white rounded-xl shadow hover:scale-105 transition overflow-hidden">
-        <img src="{% static 'images/newyork.jpg' %}" class="w-full h-32 object-cover" alt="紐約機+酒" />
-        <div class="p-4">
-          <div class="font-bold">紐約8日7夜機+酒</div>
-          <div class="text-gray-500 text-sm">華航直飛｜曼哈頓飯店</div>
-          <div class="text-blue-500 font-bold mt-1">$1299 起</div>
-        </div>
+      <div class="bg-white rounded-xl shadow p-4">
+        <img src="{% static 'images/niagara.png' %}" class="w-full h-36 object-cover rounded mb-2">
+        <div class="font-bold mb-1">尼加拉瀑布一日團</div>
+        <div class="text-gray-500 text-sm">暢遊世界大瀑布</div>
+        <div class="text-blue-500 font-bold mt-1">$299 起</div>
       </div>
-      <!-- 卡片2 -->
-      <div class="bg-white rounded-xl shadow hover:scale-105 transition overflow-hidden">
-        <img src="{% static 'images/lVG.jpg' %}" class="w-full h-32 object-cover" alt="拉斯維加斯" />
-        <div class="p-4">
-          <div class="font-bold">拉斯維加斯自由行</div>
-          <div class="text-gray-500 text-sm">含酒店｜自駕租車</div>
-          <div class="text-blue-500 font-bold mt-1">$999 起</div>
-        </div>
-      </div>
-      <!-- 你可複製再貼上更多卡片 -->
     </div>
-  </div>
-
-  <!-- 郵輪假期 -->
-  <div class="mb-12">
-    <h2 class="text-2xl font-bold text-gray-800 mb-3">郵輪假期</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-white rounded-xl shadow hover:scale-105 transition overflow-hidden">
-        <img src="{% static 'images/ROYA.jpg' %}" class="w-full h-32 object-cover" alt="加勒比郵輪" />
-        <div class="p-4">
-          <div class="font-bold">加勒比海郵輪 7天</div>
-          <div class="text-gray-500 text-sm">邁阿密出發｜全包</div>
-          <div class="text-blue-500 font-bold mt-1">$499 起</div>
-        </div>
-      </div>
-      <!-- ...其他卡片 -->
-    </div>
-  </div>
-
-  <!-- 客製包團/巴士團 -->
-  <div class="mb-12">
-    <h2 class="text-2xl font-bold text-gray-800 mb-3">客製包團・小眾巴士團</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-white rounded-xl shadow hover:scale-105 transition overflow-hidden">
-        <img src="{% static 'images/minicoach.jpg' %}" class="w-full h-32 object-contain bg-gray-50" alt="客製包團" />
-        <div class="p-4">
-          <div class="font-bold">東岸親友包團</div>
-          <div class="text-gray-500 text-sm">專人規劃，彈性出發</div>
-          <div class="text-blue-500 font-bold mt-1">立即詢價</div>
-        </div>
-      </div>
-      <!-- ...其他卡片 -->
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="mt-10 py-8 bg-gray-50 border-t">
-  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-    <div class="flex items-center gap-2">
-      <img src="{% static 'images/logo.1.png' %}" alt="EastUSA Tours Logo" class="h-8" />
-      <span class="text-gray-700 font-bold">EastUSA Tours</span>
-    </div>
-    <div class="flex items-center gap-4 text-gray-600">
-      <a href="#"><img src="{% static 'images/wechat.png' %}" alt="WeChat" class="h-6" /></a>
-      <a href="#"><img src="{% static 'images/ig.png' %}" alt="Instagram" class="h-6" /></a>
-      <a href="#"><img src="{% static 'images/fb.png' %}" alt="Facebook" class="h-6" /></a>
-      <a href="#"><img src="{% static 'images/fbmessenger.png' %}" alt="Messenger" class="h-6" /></a>
-      <a href="#"><img src="{% static 'images/whatsapp.png' %}" alt="WhatsApp" class="h-6" /></a>
-      <a href="#"><img src="{% static 'images/email.png' %}" alt="Email" class="h-6" /></a>
-    </div>
-    <div class="text-xs text-gray-400">© 2025 EastUSA Tours. All rights reserved.</div>
-  </div>
-</footer>
-</body>
-</html>
-
+  </section>
 {% endblock %}

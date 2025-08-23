@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-10">
+  <h1 class="text-2xl font-bold mb-6">{% trans "我的訂單" %}</h1>
+
+  <!-- 假資料範例 -->
+  <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+    <thead class="bg-gray-100 border-b">
+      <tr>
+        <th class="py-3 px-4 text-left">{% trans "訂單編號" %}</th>
+        <th class="py-3 px-4 text-left">{% trans "行程名稱" %}</th>
+        <th class="py-3 px-4 text-left">{% trans "日期" %}</th>
+        <th class="py-3 px-4 text-left">{% trans "金額" %}</th>
+        <th class="py-3 px-4 text-left">{% trans "狀態" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b">
+        <td class="py-3 px-4">#2025001</td>
+        <td class="py-3 px-4">紐約一日遊</td>
+        <td class="py-3 px-4">2025-08-15</td>
+        <td class="py-3 px-4">$120</td>
+        <td class="py-3 px-4 text-green-600">已完成</td>
+      </tr>
+      <tr class="border-b">
+        <td class="py-3 px-4">#2025002</td>
+        <td class="py-3 px-4">華盛頓兩日遊</td>
+        <td class="py-3 px-4">2025-09-02</td>
+        <td class="py-3 px-4">$250</td>
+        <td class="py-3 px-4 text-yellow-600">處理中</td>
+      </tr>
+      <tr>
+        <td class="py-3 px-4">#2025003</td>
+        <td class="py-3 px-4">尼加拉瓜瀑布團</td>
+        <td class="py-3 px-4">2025-09-20</td>
+        <td class="py-3 px-4">$300</td>
+        <td class="py-3 px-4 text-red-600">取消</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}

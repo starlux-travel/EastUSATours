@@ -1,4 +1,3 @@
-# tours/views.py
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.core.cache import cache
@@ -8,15 +7,42 @@ from rest_framework.views import APIView
 
 from .models import HomeConfig, Channel
 from .serializers import HomePayloadSerializer
-# tours/views.py
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
+CACHE_TTL = 60 * 5
+
 
 @login_required
 def member_dashboard(request):
     return render(request, "account/dashboard.html")
 
-CACHE_TTL = 60 * 5
+
+@login_required
+def profile_view(request):
+    if request.method == "POST":
+        if "update_profile" in request.POST:
+            form = UserChangeForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect("account_dashboard")
+        elif "change_password" in request.POST:
+            pwd_form = PasswordChangeForm(request.user, request.POST)
+            if pwd_form.is_valid():
+                user = pwd_form.save()
+                update_session_auth_hash(request, user)  # 保持登入
+                return redirect("account_dashboard")
+    else:
+        form = UserChangeForm(instance=request.user)
+        pwd_form = PasswordChangeForm(request.user)
+
+    return render(request, "account/profile.html", {
+        "form": form,
+        "pwd_form": pwd_form,
+    })
 
 
 def _site_from_request(request):
@@ -24,8 +50,8 @@ def _site_from_request(request):
     try:
         return Site.objects.get(domain=host)
     except Site.DoesNotExist:
-        from django.conf import settings
         return Site.objects.get(id=getattr(settings, "SITE_ID", 1))
+
 
 class HomeView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -47,3 +73,8 @@ class HomeView(APIView):
             data = HomePayloadSerializer(cfg).data
             cache.set(key, data, CACHE_TTL)
         return Response(data)
+# 我的訂單
+@login_required
+def orders_view(request):
+    return render(request, "account/orders.html")
+
