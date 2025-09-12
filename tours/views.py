@@ -1,53 +1,64 @@
 # tours/views.py
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets, mixins
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.db.models import Q
+from .models import Tour, TourType
+from .serializers import TourSerializer
+from .utils import pick_lang
 
-# --- 首頁（直接把資料塞進模板，不用 API/序列化） ---
-def site_home(request):
-    # 這個結構就是給 templates/home.html 用的
-    sections = [
-        {
-            "title": "美東精選",
-            "cols": 3,
-            "cards": [
-                {
-                    "title": "紐約經典一日遊",
-                    "subtitle": "自由女神/華爾街/華盛頓廣場",
-                    "price_label": "$199 起",
-                    "tag": "熱銷",
-                    "image_url": "/static/images/sample/nyc.jpg",
-                    "link_url": "#",
-                },
-                {
-                    "title": "尼加拉瀑布一日",
-                    "subtitle": "瀑布遊船/夜景觀賞",
-                    "price_label": "$249 起",
-                    "tag": "",
-                    "image_url": "/static/images/sample/niagara.jpg",
-                    "link_url": "#",
-                },
-                {
-                    "title": "波士頓文化一日",
-                    "subtitle": "自由之路/昆西市場",
-                    "price_label": "$179 起",
-                    "tag": "特價",
-                    "image_url": "/static/images/sample/boston.jpg",
-                    "link_url": "#",
-                },
-            ],
-        },
-    ]
-    return render(request, "home.html", {"sections": sections})
+def home(request, *args, **kwargs):
+    """首頁：依登入狀態顯示不同版本"""
+    template = "tours/home_member.html" if request.user.is_authenticated else "tours/home_guest.html"
+    return render(request, template, {})
 
-# --- 會員中心（保持你原本有的導覽） ---
-@login_required
-def member_dashboard(request):
-    return render(request, "account/dashboard.html")
+def tour_list(request):
+    """Tours 列表頁"""
+    tours = Tour.objects.filter(is_active=True).order_by("-updated_at", "-id")[:20]
+    return render(request, "tours/tour_list.html", {"tours": tours})
 
-@login_required
-def profile_view(request):
-    return render(request, "account/profile.html")
+def tour_detail(request, pk):
+    """Tours 詳細頁"""
+    tour = Tour.objects.filter(pk=pk, is_active=True).first()
+    return render(request, "tours/tour_detail.html", {"tour": tour})
 
-@login_required
-def orders_view(request):
-    return render(request, "account/orders.html")
+class TourViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.CreateModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  viewsets.GenericViewSet):
+    queryset = Tour.objects.filter(is_active=True).order_by("-updated_at", "-id")
+    serializer_class = TourSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        req = self.request
+        t = req.query_params.get("type")  # bus_tour / cruise_tour
+        q = req.query_params.get("q")
+        if t in (TourType.BUS, TourType.CRUISE):
+            qs = qs.filter(tour_type=t)
+        if q:
+            lang = (req.query_params.get("lang") or "zh-Hant")
+            key_map = {
+                "zh-Hant": ("title__zh_Hant", "desc__zh_Hant"),
+                "zh-Hans": ("title__zh_Hans", "desc__zh_Hans"),
+                "en": ("title__en", "desc__en"),
+            }
+            k1, k2 = key_map.get(lang, ("title__zh_Hant", "desc__zh_Hant"))
+            qs = qs.filter(Q(**{f"{k1}__icontains": q}) | Q(**{f"{k2}__icontains": q}))
+        return qs
+
+    @action(detail=True, methods=["get"])
+    def display(self, request, pk=None):
+        obj = self.get_object()
+        lang = request.query_params.get("lang") or "zh-Hant"
+        data = {
+            "id": obj.id,
+            "type": obj.tour_type,
+            "title": pick_lang(obj.title or {}, lang),
+            "desc": pick_lang(obj.desc or {}, lang),
+            "faq": pick_lang(obj.faq or {}, lang),
+        }
+        return Response(data)

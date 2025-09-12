@@ -1,34 +1,34 @@
 # tours/serializers.py
 from rest_framework import serializers
-from .models import HomeConfig, Section, SectionCard
+from .models import Tour
+from .utils import pick_lang
 
-class SectionCardSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SectionCard
-        fields = (
-            "title", "subtitle", "image_url", "price_label",
-            "tag", "link_url", "order", "is_active",
-        )
-
-class SectionSerializer(serializers.ModelSerializer):
-    cards = SectionCardSerializer(many=True)
+class TourSerializer(serializers.ModelSerializer):
+    display_title = serializers.SerializerMethodField()
+    display_desc = serializers.SerializerMethodField()
+    display_faq = serializers.SerializerMethodField()
 
     class Meta:
-        model = Section
-        fields = (
-            "title", "subtitle", "slug", "layout", "columns",
-            "show_divider", "max_items", "more_label", "more_url",
-            "order", "is_active", "cards",
-        )
+        model = Tour
+        fields = [
+            "id", "tour_type",
+            "title", "desc", "faq",
+            "display_title", "display_desc", "display_faq",
+            "meeting_point", "pickup_time",
+            "embark_port", "sail_date", "cabin_type",
+            "price", "cover_image", "is_active",
+            "updated_at",
+        ]
 
-class HomePayloadSerializer(serializers.ModelSerializer):
-    sections = SectionSerializer(many=True)
+    def _lang(self):
+        request = self.context.get("request")
+        return (request.query_params.get("lang") if request else None) or "zh-Hant"
 
-    class Meta:
-        model = HomeConfig
-        fields = (
-            "hero_title", "hero_subtitle", "hero_bg_image", "show_breadcrumbs",
-            "seo_title", "seo_description", "seo_keywords",
-            "show_orders_widget", "show_points_widget", "show_profile_widget", "show_coupons_widget",
-            "sections",
-        )
+    def get_display_title(self, obj):
+        return pick_lang(obj.title or {}, self._lang())
+
+    def get_display_desc(self, obj):
+        return pick_lang(obj.desc or {}, self._lang())
+
+    def get_display_faq(self, obj):
+        return pick_lang(obj.faq or {}, self._lang())

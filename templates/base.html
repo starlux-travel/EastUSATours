@@ -1,27 +1,21 @@
-{% load static i18n %}
+{% load static i18n custom_filters %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}East USA Tours{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'css/tailwind.css' %}" />
-</head>
-<body class="font-sans">
-  {% include "partials/navbar.html" %}
+<html lang="{{ ext_lang|default:'en' }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}EastUSATours{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    {% include "partials/navbar.html" %}
 
-  <main>
-    {% block content %}{% endblock %}
-  </main>
+    <main class="container mx-auto px-4 py-6">
+      {% block content %}{% endblock %}
+    </main>
 
-  {% include "partials/footer.html" %}
-
-  <!-- zh-tw → zh-cn 簡體轉換 -->
-  <script src="https://cdn.jsdelivr.net/npm/s2t-chinese/lib/s2t.min.js"></script>
-  <script>
-    if (location.pathname.includes("/zh-cn/")) {
-      document.body.innerHTML = window.s2t.convertSimple(document.body.innerHTML);
-    }
-  </script>
-</body>
+    {% include "partials/footer.html" %}
+    {% block extra_js %}{% endblock %}
+  </body>
 </html>

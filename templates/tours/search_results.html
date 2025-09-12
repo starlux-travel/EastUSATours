@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Search results" %}{% endblock %}
+
+{% block content %}
+  <h1 class="text-xl font-semibold mb-4">{% trans "Search results" %}</h1>
+  <p class="text-sm text-gray-500">{% trans "No results yet." %}</p>
+{% endblock %}

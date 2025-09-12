@@ -1,26 +1,14 @@
 # tours/signals.py
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-from django.core.cache import cache
-from .models import HomeConfig, Section, SectionCard
+"""
+目前不使用任何 signals。
+將來若要針對 Tour 模型加快取或同步邏輯，可以在這裡新增 receiver。
+"""
 
-def _key(homecfg: HomeConfig):
-    return f"home:{homecfg.site_id}:{homecfg.channel}"
+from django.db.models.signals import post_save, post_delete  # noqa: F401
+from django.dispatch import receiver  # noqa: F401
 
-def _invalidate(homecfg: HomeConfig):
-    cache.delete(_key(homecfg))
-
-@receiver(post_save, sender=HomeConfig)
-@receiver(post_delete, sender=HomeConfig)
-def home_changed(sender, instance, **kwargs):
-    _invalidate(instance)
-
-@receiver(post_save, sender=Section)
-@receiver(post_delete, sender=Section)
-def section_changed(sender, instance, **kwargs):
-    _invalidate(instance.home)
-
-@receiver(post_save, sender=SectionCard)
-@receiver(post_delete, sender=SectionCard)
-def card_changed(sender, instance, **kwargs):
-    _invalidate(instance.section.home)
+# 範例（之後需要再打開）
+# from .models import Tour
+# @receiver(post_save, sender=Tour)
+# def tour_changed(sender, instance, **kwargs):
+#     pass

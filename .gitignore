@@ -1,14 +1,25 @@
-# Python
+# 忽略 Python 暫存與編譯
 __pycache__/
 *.py[cod]
+
+# SQLite 資料庫
 *.sqlite3
 
-# Virtual Environment
+# 虛擬環境相關
 venv/
 .env
 
-# VS Code
+# 編輯器相關
 .vscode/
 
-# Django migrations
-*/migrations/
+# Django 遷移檔案自動生成
+migrations/
+
+# 翻譯暫存與編輯備份
+locale/**/LC_MESSAGES/*.mo
+locale/**/LC_MESSAGES/*.po~
+locale/**/LC_MESSAGES/*.pot
+
+# 前端工具
+node_modules/
+.cache/

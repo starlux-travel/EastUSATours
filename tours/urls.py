@@ -1,9 +1,11 @@
+# tours/urls.py
 from django.urls import path
-from .views import site_home, member_dashboard, profile_view, orders_view
+from . import views
+
+app_name = "tours"
 
 urlpatterns = [
-    path("", site_home, name="home"),
-    path("account/", member_dashboard, name="account_dashboard"),
-    path("account/profile/", profile_view, name="account_profile"),
-    path("account/orders/", orders_view, name="account_orders"),
+    path("", views.home, name="home"),              # 首頁
+    path("list/", views.tour_list, name="tour_list"),  # Tours 列表
+    path("<int:pk>/", views.tour_detail, name="tour_detail"),  # Tours 詳細頁
 ]

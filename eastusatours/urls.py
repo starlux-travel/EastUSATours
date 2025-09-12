@@ -1,27 +1,30 @@
+# eastusatours/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
 from django.conf import settings
 from django.conf.urls.static import static
-from django.conf.urls.i18n import i18n_patterns
-from django.contrib.auth import views as auth_views
+from rest_framework.routers import DefaultRouter
+from tours.api import TourViewSet   # 👈 需要有 tours/api.py
+from tours import views as tour_views   # 👈 指向首頁 home view
 
-# 🔹 非語系前綴路由：語言切換用
+router = DefaultRouter()
+router.register(r"tours", TourViewSet, basename="tour")
+
 urlpatterns = [
+    # 語言切換 API
     path("i18n/", include("django.conf.urls.i18n")),
+    # API router
+    path("api/", include(router.urls)),
 ]
 
-# 🔹 語系開頭的路由（會變成 /zh-tw/ /en/）
+# 多語路由
 urlpatterns += i18n_patterns(
-    path("", include("tours.urls")),
-    path("accounts/login/", auth_views.LoginView.as_view(template_name="auth/login.html"), name="login"),
-    path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path("accounts/reset/", auth_views.PasswordResetView.as_view(template_name="auth/password_reset_form.html"), name="password_reset"),
-    path("accounts/reset/done/", auth_views.PasswordResetDoneView.as_view(template_name="auth/password_reset_done.html"), name="password_reset_done"),
-    path("accounts/reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(template_name="auth/password_reset_confirm.html"), name="password_reset_confirm"),
-    path("accounts/reset/complete/", auth_views.PasswordResetCompleteView.as_view(template_name="auth/password_reset_complete.html"), name="password_reset_complete"),
     path("admin/", admin.site.urls),
-    prefix_default_language=True,
+    path("", tour_views.home, name="home"),  # 👈 首頁對應 home view
+    path("accounts/", include("accounts.urls")),
+    path("tours/", include("tours.urls")),
 )
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

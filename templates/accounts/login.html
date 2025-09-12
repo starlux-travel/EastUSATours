@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="max-w-md mx-auto p-6 bg-white shadow">
+  <h2 class="text-xl font-bold mb-4">{% trans "會員登入" %}</h2>
+
+  <form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+      {% trans "登入" %}
+    </button>
+  </form>
+
+  <p class="mt-4 text-sm">
+    <a href="{% url 'account_signup' %}" class="text-blue-600 hover:underline">
+      {% trans "註冊新帳號" %}
+    </a> | 
+    <a href="{% url 'account_reset_password' %}" class="text-blue-600 hover:underline">
+      {% trans "忘記密碼？" %}
+    </a>
+  </p>
+</div>
+{% endblock %}

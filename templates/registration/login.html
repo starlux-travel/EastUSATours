@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+  <h2 class="text-xl font-bold mb-4">會員登入</h2>
+  {# Display non‑field errors (e.g. invalid credentials) #}
+  {% if form.non_field_errors %}
+    <div class="mb-4 p-3 rounded bg-red-50 text-red-600 text-sm">
+      {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+    </div>
+  {% endif %}
+  <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-primary w-full">登入</button>
+  </form>
+  <p class="mt-4 text-sm">
+      <a href="{% url 'password_reset' %}" class="text-blue-600 hover:underline">忘記密碼？</a>
+  </p>
+</div>
+{% endblock %}

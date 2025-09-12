@@ -1,45 +1,99 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block content %}
-  {% include "partials/navbar.html" %}
+{% block title %}{% trans "EastUSATours 首頁" %}{% endblock %}
 
-  <section class="max-w-6xl mx-auto px-6 py-10">
-    {% if sections %}
-      {% for sec in sections %}
-        <div class="section mb-12">
-          <h2 class="text-2xl font-bold mb-6">{{ sec.title }}</h2>
-          <div class="grid gap-6" style="grid-template-columns: repeat({{ sec.cols|default:3 }}, minmax(0, 1fr));">
-            {% for card in sec.cards %}
-              <a href="{{ card.link_url|default:'#' }}" class="block rounded-xl shadow hover:shadow-lg overflow-hidden bg-white">
-                <div class="h-40 bg-gray-200">
-                  {% if card.image_url %}
-                    <img src="{{ card.image_url }}" alt="{{ card.title }}" class="w-full h-full object-cover" />
-                  {% endif %}
-                </div>
-                <div class="p-4">
-                  <div class="flex items-center justify-between">
-                    <h3 class="font-semibold text-gray-900">{{ card.title }}</h3>
-                    {% if card.price_label %}
-                      <span class="card-price text-emerald-600 font-bold text-sm">{{ card.price_label }}</span>
-                    {% endif %}
-                  </div>
-                  {% if card.subtitle %}
-                    <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ card.subtitle }}</p>
-                  {% endif %}
-                  {% if card.tag %}
-                    <span class="inline-block mt-2 text-xs px-2 py-0.5 rounded bg-amber-50 text-amber-700">{{ card.tag }}</span>
-                  {% endif %}
-                </div>
-              </a>
-            {% endfor %}
-          </div>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p class="text-center text-gray-500">{% trans "目前沒有可顯示的行程。" %}</p>
-    {% endif %}
+{% block content %}
+  <!-- Hero Banner -->
+  <section class="relative bg-blue-100">
+    <div class="container mx-auto py-10 text-center">
+      <h1 class="text-4xl font-bold mb-4">{% trans "EastUSATours 郵輪假期" %}</h1>
+      <p class="text-lg mb-6">{% trans "從海上開始，探索世界！" %}</p>
+      <a href="{% url 'tour_list' %}?tour_type=cruise_tour" 
+         class="px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700">
+        {% trans "立即查看郵輪行程" %}
+      </a>
+    </div>
   </section>
 
-  {% include "partials/footer.html" %}
+  <!-- 搜尋區塊 -->
+  <section class="container mx-auto py-8">
+    <div class="bg-white shadow p-6 rounded">
+      <form method="get" action="{% url 'tour_list' %}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <select name="tour_type" class="border p-2 rounded">
+          <option value="cruise_tour" selected>🛳 {% trans "郵輪" %}</option>
+          <option value="bus_tour">🚌 {% trans "巴士團" %}</option>
+        </select>
+        <input type="text" name="region" placeholder="{% trans '輸入城市/Region' %}" class="border p-2 rounded">
+        <input type="number" name="days" placeholder="{% trans '天數' %}" class="border p-2 rounded">
+        <button type="submit" class="bg-green-600 text-white rounded px-4 py-2">
+          {% trans "搜尋" %}
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 郵輪專區 -->
+  <section class="container mx-auto py-10">
+    <h2 class="text-3xl font-bold mb-6">{% trans "熱門郵輪航線" %}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for tour in tours_cruise %}
+        <div class="border rounded shadow p-4">
+          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
+          <h3 class="font-bold">{{ tour.title }}</h3>
+          <p class="text-red-600">${{ tour.price }}</p>
+        </div>
+      {% empty %}
+        <p class="text-gray-600">{% trans "目前沒有郵輪行程" %}</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 熱門行程 -->
+  <section class="container mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-4">{% trans "熱門行程" %}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for tour in hot_tours %}
+        <div class="border rounded shadow p-4">
+          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
+          <h3 class="font-bold">{{ tour.title }}</h3>
+          <p class="text-gray-600">${{ tour.price }}</p>
+        </div>
+      {% empty %}
+        <p class="text-gray-600">{% trans "目前沒有熱門行程" %}</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 美國巴士 -->
+  <section class="container mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-6">{% trans "美國巴士團" %}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for tour in tours_us %}
+        <div class="border rounded shadow p-4">
+          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
+          <h3 class="font-bold">{{ tour.title }}</h3>
+          <p class="text-gray-600">${{ tour.price }}</p>
+        </div>
+      {% empty %}
+        <p class="text-gray-600">{% trans "目前沒有巴士行程" %}</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 歐洲旅遊 -->
+  <section class="container mx-auto py-10">
+    <h2 class="text-2xl font-bold mb-6">{% trans "歐洲旅遊" %}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for tour in tours_eu %}
+        <div class="border rounded shadow p-4">
+          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
+          <h3 class="font-bold">{{ tour.title }}</h3>
+          <p class="text-gray-600">${{ tour.price }}</p>
+        </div>
+      {% empty %}
+        <p class="text-gray-600">{% trans "目前沒有歐洲行程" %}</p>
+      {% endfor %}
+    </div>
+  </section>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+  <h2 class="text-xl font-bold mb-4">會員中心</h2>
+  <p class="mb-6">歡迎回來！您可以在此查看您的個人資料和訂單記錄。</p>
+  <ul class="space-y-2 list-disc list-inside">
+      <li><a href="{% url 'accounts:profile' %}" class="text-blue-600 hover:underline">個人資料</a></li>
+      <li><a href="{% url 'accounts:orders' %}" class="text-blue-600 hover:underline">我的訂單</a></li>
+  </ul>
+</div>
+{% endblock %}
