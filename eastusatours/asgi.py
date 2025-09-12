@@ -1,10 +1,7 @@
-"""
-ASGI config for eastusatours project.
+import os
 
-It exposes the ASGI callable as a module-level variable named ``application``.
+from django.core.asgi import get_asgi_application
 
-For more information on this file, see
-https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
-"""
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eastusatours.settings")
 
-
+application = get_asgi_application()

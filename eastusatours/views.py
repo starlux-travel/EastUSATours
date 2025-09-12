@@ -17,4 +17,4 @@ def home(request):
         "tours_us": tours_us,
         "tours_eu": tours_eu,
     }
-    return render(request, "home.html", context)
+    return render(request, "tours/home_guest.html", context)
