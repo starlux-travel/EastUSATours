@@ -1,0 +1,67 @@
+{% load i18n %}
+{# templates/partials/tours_search_box.html #}
+
+<form method="get" action="{% url 'tours:tours_search' %}">
+    <div>
+        <label>出發城市：</label>
+        <select name="city">
+            <option value="">不限</option>
+            <optgroup label="美國西海岸">
+                <option value="洛杉磯">洛杉磯出發</option>
+                <option value="拉斯維加斯">拉斯維加斯出發</option>
+                <option value="舊金山">舊金山出發</option>
+                <option value="西雅圖">西雅圖出發</option>
+                <option value="鹽湖城">鹽湖城出發</option>
+                <option value="一號公路系列">一號公路系列</option>
+                <option value="海岸星光號火車">海岸星光號火車</option>
+            </optgroup>
+            <optgroup label="美國東海岸">
+                <option value="紐約">紐約出發</option>
+                <option value="波士頓">波士頓出發</option>
+                <option value="博物館中文講解">博物館中文講解</option>
+                <option value="精品小團">精品小團</option>
+                <option value="大瀑布短途遊">大瀑布短途遊</option>
+                <option value="火車專列｜省時">火車專列｜省時</option>
+                <option value="橫跨美國">橫跨美國</option>
+            </optgroup>
+            <optgroup label="北美國家公園">
+                <option value="黃石國家公園">黃石國家公園</option>
+                <option value="羚羊彩穴">羚羊彩穴</option>
+                <option value="大峽谷國家公園">大峽谷國家公園</option>
+                <option value="尼亞加拉大瀑布">尼亞加拉大瀑布</option>
+                <option value="優勝美地公園">優勝美地公園</option>
+            </optgroup>
+            <optgroup label="美國中南部">
+                <option value="丹佛">丹佛出發</option>
+                <option value="芝加哥">芝加哥出發</option>
+                <option value="德克薩斯州">德克薩斯州</option>
+                <option value="新奧爾良">新奧爾良</option>
+                <option value="休斯頓">休斯頓</option>
+                <option value="鳳凰城">鳳凰城出發</option>
+            </optgroup>
+            <optgroup label="海島邊疆特色">
+                <option value="阿拉斯加極光">阿拉斯加極光</option>
+                <option value="夏威夷">夏威夷</option>
+                <option value="邁阿密">邁阿密</option>
+                <option value="奧蘭多">奧蘭多</option>
+            </optgroup>
+            <optgroup label="美西樂園與玩法">
+                <option value="洛杉磯特色玩法">洛杉磯特色玩法</option>
+                <option value="拉斯周邊特色遊">拉斯周邊特色遊</option>
+            </optgroup>
+            <option value="阿拉斯加">阿拉斯加</option>
+        </select>
+    </div>
+
+    <div>
+        <label>出發日期：</label>
+        <input type="date" name="depart_date" value="{{ selected_date }}">
+    </div>
+
+    <div>
+        <label>關鍵字：</label>
+        <input type="text" name="keyword" value="{{ keyword }}">
+    </div>
+
+    <button type="submit">搜尋</button>
+</form>

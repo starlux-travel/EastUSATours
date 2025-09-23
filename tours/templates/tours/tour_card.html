@@ -1,0 +1,53 @@
+{% load i18n %}
+
+<!-- 🏷️ 行程卡片 -->
+<div
+  class="tour-card border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+>
+  <a href="{% url 'tours:tour_detail' tour.id %}">
+    <!-- 圖片 -->
+    {% if tour.image_url %}
+    <img
+      src="{{ tour.image_url }}"
+      alt="{{ tour.title }}"
+      class="w-full h-48 object-cover"
+    />
+    {% else %}
+    <div
+      class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500"
+    >
+      {% trans "暫無圖片" %}
+    </div>
+    {% endif %}
+  </a>
+
+  <!-- 內容 -->
+  <div class="p-4">
+    <h3 class="text-lg font-bold mb-2">
+      <a
+        href="{% url 'tours:tour_detail' tour.id %}"
+        class="hover:text-blue-600"
+      >
+        {{ tour.title }}
+      </a>
+    </h3>
+
+    <!-- 價格 -->
+    <p class="text-red-600 text-xl font-semibold mb-2">
+      {{ tour.price }} {% trans "美元" %}
+    </p>
+
+    <!-- 簡介 -->
+    <p class="text-gray-600 text-sm mb-4">
+      {{ tour.description|truncatewords:20 }}
+    </p>
+
+    <!-- CTA -->
+    <a
+      href="{% url 'tours:tour_detail' tour.id %}"
+      class="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+    >
+      {% trans "查看詳情" %}
+    </a>
+  </div>
+</div>

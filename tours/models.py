@@ -1,100 +1,78 @@
 from django.db import models
-from django.utils import timezone
+from django.utils import translation
 
-# ---- 現有其他模型（略） ----
-# 若你已經有 HomeConfig / Section / SectionCard / TourCategory 等，保留即可
 
-class TourType(models.TextChoices):
-    BUS = "bus_tour", "巴士團"
-    CRUISE = "cruise_tour", "郵輪團"
-    
-
-def _convert_hant_to_hans(text: str) -> str:
-    """
-    嘗試用 OpenCC 做繁→簡；若環境沒有 opencc 套件，使用簡易 fallback（不做破壞性轉換）。
-    """
-    if not text:
-        return text
-    try:
-        # pip install opencc-python-reimplemented
-        from opencc import OpenCC
-        return OpenCC("t2s").convert(text)
-    except Exception:
-        # 安全 fallback：直接回傳原字串（等之後裝好 opencc 再轉）
-        return text
-
-class Tour(models.Model):
-    # 基本
-    tour_type = models.CharField(max_length=20, choices=TourType.choices, db_index=True)
-    # 多語 JSON：各自包含 {"zh_Hant": "...", "zh_Hans": "...", "en": "..."}
-    default=TourType.BUS,
-    
-    title = models.JSONField(default=dict, blank=True)
-    desc = models.JSONField(default=dict, blank=True)
-    faq = models.JSONField(default=dict, blank=True)
-
-    # 同步旗標（語言流程控管）
-    zh_Hant_translated = models.BooleanField(default=False, help_text="繁體已完成")
-    zh_Hans_synced = models.BooleanField(default=True, help_text="簡體與繁體自動同步（未手改）")
-    en_translated = models.BooleanField(default=False, help_text="英文已完成")
-
-    # 巴士專用
-    meeting_point = models.CharField(max_length=255, blank=True, default="")
-    pickup_time = models.TimeField(blank=True, null=True)
-
-    # 郵輪專用
-    embark_port = models.CharField(max_length=255, blank=True, default="")
-    sail_date = models.DateField(blank=True, null=True)
-    cabin_type = models.CharField(max_length=100, blank=True, default="")
-
-    # 其他可選
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    cover_image = models.URLField(blank=True, default="")
-    is_active = models.BooleanField(default=True, db_index=True)
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["-updated_at", "-id"]
+class DepartureRegion(models.Model):
+    """巴士/團體旅遊的出發地區 (例：美東、美西、加拿大、歐洲、亞洲)"""
+    name_zh_hant = models.CharField(max_length=100, null=True, blank=True, verbose_name="地區名稱 (繁體)")
+    name_zh_hans = models.CharField(max_length=100, null=True, blank=True, verbose_name="地區名稱 (簡體)")
+    name_en = models.CharField(max_length=100, null=True, blank=True, verbose_name="地區名稱 (英文)")
 
     def __str__(self):
-        # 以繁體做為顯示名稱 fallback
-        t = (self.title or {})
-        return t.get("zh_Hant") or t.get("en") or f"Tour #{self.pk}"
+        return self.name_zh_hant or self.name_en or "Unnamed Region"
 
-    # ---- 語言同步（儲存前自動繁→簡）----
-    def _autosync_lang_block(self, block: dict) -> dict:
-        """
-        block 結構如：{"zh_Hant": "...", "zh_Hans": "...", "en": "..."}
-        若 zh_Hans_synced=True，則用 zh_Hant 自動轉 zh_Hans（保留 en）
-        """
-        block = block or {}
-        hant = (block.get("zh_Hant") or "").strip()
-        hans = (block.get("zh_Hans") or "").strip()
-        en = (block.get("en") or "").strip()
 
-        if self.zh_Hans_synced:
-            # 以繁體為來源產生簡體
-            hans = _convert_hant_to_hans(hant) if hant else hans
+class DepartureCity(models.Model):
+    """具體出發城市 (例：紐約、波士頓、洛杉磯、拉斯維加斯)"""
+    region = models.ForeignKey(DepartureRegion, on_delete=models.CASCADE, related_name="cities")
+    name_zh_hant = models.CharField(max_length=100, null=True, blank=True, verbose_name="城市名稱 (繁體)")
+    name_zh_hans = models.CharField(max_length=100, null=True, blank=True, verbose_name="城市名稱 (簡體)")
+    name_en = models.CharField(max_length=100, null=True, blank=True, verbose_name="城市名稱 (英文)")
 
-        return {"zh_Hant": hant, "zh_Hans": hans, "en": en}
+    def __str__(self):
+        return self.name_zh_hant or self.name_en or "Unnamed City"
 
-    def _clear_fields_by_type(self):
-        """避免存到不相干的欄位"""
-        if self.tour_type == TourType.BUS:
-            self.embark_port = ""
-            self.sail_date = None
-            self.cabin_type = ""
-        elif self.tour_type == TourType.CRUISE:
-            self.meeting_point = ""
-            self.pickup_time = None
 
-    def save(self, *args, **kwargs):
-        # 語言同步
-        self.title = self._autosync_lang_block(self.title)
-        self.desc = self._autosync_lang_block(self.desc)
-        self.faq = self._autosync_lang_block(self.faq)
+class Tour(models.Model):
+    """旅遊產品 (巴士團、一日遊、多日團)"""
+    title_zh_hant = models.CharField(max_length=200, null=True, blank=True, verbose_name="標題 (繁體)")
+    title_zh_hans = models.CharField(max_length=200, null=True, blank=True, verbose_name="標題 (簡體)")
+    title_en = models.CharField(max_length=200, null=True, blank=True, verbose_name="標題 (英文)")
 
-        # 類型防呆
-        self._clear_fields_by_type()
-        super().save(*args, **kwargs)
+    description_zh_hant = models.TextField(null=True, blank=True, verbose_name="描述 (繁體)")
+    description_zh_hans = models.TextField(null=True, blank=True, verbose_name="描述 (簡體)")
+    description_en = models.TextField(null=True, blank=True, verbose_name="描述 (英文)")
+
+    departure_region = models.ForeignKey(DepartureRegion, on_delete=models.SET_NULL, null=True, blank=True)
+    departure_city = models.ForeignKey(DepartureCity, on_delete=models.SET_NULL, null=True, blank=True)
+
+    departure_date = models.DateField(null=True, blank=True, verbose_name="出發日期")
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    is_active = models.BooleanField(default=True, verbose_name="是否啟用")
+
+    def __str__(self):
+        return self.get_title() or "Unnamed Tour"
+
+    # === Helper: 語言自動切換 ===
+    def get_title(self):
+        lang = translation.get_language() or ""
+        if lang.startswith("zh-hant"):
+            return self.title_zh_hant or self.title_en
+        elif lang.startswith("zh-hans"):
+            return self.title_zh_hans or self.title_en
+        return self.title_en or self.title_zh_hant or self.title_zh_hans
+
+    def get_description(self):
+        lang = translation.get_language() or ""
+        if lang.startswith("zh-hant"):
+            return self.description_zh_hant or self.description_en
+        elif lang.startswith("zh-hans"):
+            return self.description_zh_hans or self.description_en
+        return self.description_en or self.description_zh_hant or self.description_zh_hans
+    
+
+class Banner(models.Model):
+    title = models.CharField(max_length=200, verbose_name="標題")
+    image = models.ImageField(upload_to="banners/", verbose_name="圖片")
+    link = models.URLField(blank=True, null=True, verbose_name="連結")
+    order = models.PositiveIntegerField(default=0, verbose_name="排序")
+    is_active = models.BooleanField(default=True, verbose_name="是否啟用")
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "首頁 Banner"
+        verbose_name_plural = "首頁 Banners"
+
+    def __str__(self):
+        return self.title
+
