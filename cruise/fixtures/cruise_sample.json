@@ -1,0 +1,74 @@
+[
+  {
+    "model": "cruise.region",
+    "pk": 1,
+    "fields": {
+      "name_zh_hant": "加勒比海",
+      "name_zh_hans": "加勒比海",
+      "name_en": "Caribbean"
+    }
+  },
+  {
+    "model": "cruise.region",
+    "pk": 2,
+    "fields": {
+      "name_zh_hant": "地中海",
+      "name_zh_hans": "地中海",
+      "name_en": "Mediterranean"
+    }
+  },
+  {
+    "model": "cruise.cruiseport",
+    "pk": 1,
+    "fields": {
+      "region": 1,
+      "name_zh_hant": "邁阿密港",
+      "name_zh_hans": "迈阿密港",
+      "name_en": "Port of Miami"
+    }
+  },
+  {
+    "model": "cruise.cruiseport",
+    "pk": 2,
+    "fields": {
+      "region": 2,
+      "name_zh_hant": "巴塞隆納港",
+      "name_zh_hans": "巴塞罗那港",
+      "name_en": "Port of Barcelona"
+    }
+  },
+  {
+    "model": "cruise.cruisetour",
+    "pk": 1,
+    "fields": {
+      "title_zh_hant": "加勒比海七日豪華郵輪",
+      "title_zh_hans": "加勒比海七日豪华邮轮",
+      "title_en": "7-Day Luxury Caribbean Cruise",
+      "description_zh_hant": "體驗加勒比海陽光與海灘，享受無限美食與娛樂。",
+      "description_zh_hans": "体验加勒比海阳光与海滩，享受无限美食与娱乐。",
+      "description_en": "Enjoy Caribbean sunshine, beaches, unlimited food and entertainment.",
+      "departure_region": 1,
+      "departure_port": 1,
+      "departure_date": "2025-11-05",
+      "price": "1299.99",
+      "is_active": true
+    }
+  },
+  {
+    "model": "cruise.cruisetour",
+    "pk": 2,
+    "fields": {
+      "title_zh_hant": "地中海十日郵輪之旅",
+      "title_zh_hans": "地中海十日邮轮之旅",
+      "title_en": "10-Day Mediterranean Cruise",
+      "description_zh_hant": "走訪義大利、希臘與西班牙，探索古老文明與文化。",
+      "description_zh_hans": "走访意大利、希腊与西班牙，探索古老文明与文化。",
+      "description_en": "Visit Italy, Greece and Spain, explore ancient civilizations and cultures.",
+      "departure_region": 2,
+      "departure_port": 2,
+      "departure_date": "2025-09-15",
+      "price": "1999.00",
+      "is_active": true
+    }
+  }
+]

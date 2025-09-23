@@ -1,0 +1,48 @@
+{% load i18n %}
+<form method="get" action="{% url 'cruise:cruise_search' %}" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+  <div>
+    <label>{% trans "郵輪公司" %}</label>
+    <select name="company" class="w-full rounded">
+      <option value="">{% trans "全部" %}</option>
+      {% for c in companies %}
+        <option value="{{ c.id }}">{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label>{% trans "航線地區" %}</label>
+    <select name="region" class="w-full rounded">
+      <option value="">{% trans "全部" %}</option>
+      {% for r in regions %}
+        <option value="{{ r.id }}">{{ r.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label>{% trans "出發港口" %}</label>
+    <select name="port" class="w-full rounded">
+      <option value="">{% trans "全部" %}</option>
+      {% for p in ports %}
+        <option value="{{ p.id }}">{{ p.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label>{% trans "出發月份" %}</label>
+    <select name="month" class="w-full rounded">
+      <option value="">{% trans "全部" %}</option>
+      {% for m in months %}
+        <option value="{{ m }}">{{ m }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="flex items-center">
+    <input type="checkbox" name="is_chinese" value="1" id="is_chinese" class="mr-2">
+    <label for="is_chinese">{% trans "中文導遊團" %}</label>
+  </div>
+  <div class="flex items-center">
+    <input type="checkbox" name="is_discount" value="1" id="is_discount" class="mr-2">
+    <label for="is_discount">{% trans "特價" %}</label>
+    <button type="submit" class="w-full bg-blue-600 text-white rounded ml-2">{% trans "搜尋" %}</button>
+  </div>
+</form>
