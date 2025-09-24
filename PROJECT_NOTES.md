@@ -1535,3 +1535,36 @@ staticfiles ⚠️ → 只給 collectstatic 用
 Git 還沒 init
 
 Render 還沒配置
+
+沒問題啦 😊 我一步一步教你，保證不會把檔案弄丟。
+現在看到的 deleted / modified 紅字，只是 Git 在「記錄」裡以為被刪掉，但實際上檔案還在你電腦裡。
+我們要做的是 把檔案狀態恢復正常 → 再推上去。
+
+👩‍💻 你現在可以照著打：
+
+（在專案根目錄，VSCode 的 terminal）
+
+先把 Git 以為被刪掉的檔案「還原」：
+
+git restore templates/
+
+
+把所有變更（包含還原的檔案）重新加入 Git：
+
+git add .
+
+
+建立一次新的 commit（幫它寫個訊息）：
+
+git commit -m "fix: restore templates and sync project files"
+
+
+推上 GitHub：
+
+git push origin master
+
+🚨 小提醒
+
+不要用 git rm，那個會真的刪檔。
+
+如果 push 完，Render 部屬還是錯，我們再看 log，但這次至少「檔案不會消失」。
