@@ -1,0 +1,40 @@
+{% load static %}
+{% load i18n %}
+
+<section class="container mx-auto px-6 py-10">
+  <h2 class="text-xl font-bold mb-6">{% trans "熱門目的地" %}</h2>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+
+    <a href="#" class="block text-center rounded-lg bg-white shadow hover:shadow-lg transition p-4">
+      <img src="{% static 'images/icon-ny.png' %}" alt="New York" class="mx-auto w-10 h-10 mb-2">
+      <div class="text-sm font-semibold text-gray-700">紐約</div>
+    </a>
+
+    <a href="#" class="block text-center rounded-lg bg-white shadow hover:shadow-lg transition p-4">
+      <img src="{% static 'images/icons-paris.png' %}" alt="Paris" class="mx-auto w-10 h-10 mb-2">
+      <div class="text-sm font-semibold text-gray-700">巴黎</div>
+    </a>
+
+    <a href="#" class="block text-center rounded-lg bg-white shadow hover:shadow-lg transition p-4">
+      <img src="{% static 'images/icon-canada.png' %}" alt="Toronto" class="mx-auto w-10 h-10 mb-2">
+      <div class="text-sm font-semibold text-gray-700">多倫多</div>
+    </a>
+
+    <a href="#" class="block text-center rounded-lg bg-white shadow hover:shadow-lg transition p-4">
+      <img src="{% static 'images/icon-london.png' %}" alt="London" class="mx-auto w-10 h-10 mb-2">
+      <div class="text-sm font-semibold text-gray-700">倫敦</div>
+    </a>
+
+    <a href="#" class="block text-center rounded-lg bg-white shadow hover:shadow-lg transition p-4">
+      <img src="{% static 'images/icontokyo.png' %}" alt="Tokyo" class="mx-auto w-10 h-10 mb-2">
+      <div class="text-sm font-semibold text-gray-700">東京</div>
+    </a>
+
+    <a href="#" class="block text-center rounded-lg bg-white shadow hover:shadow-lg transition p-4">
+      <img src="{% static 'images/iconhawaii.png' %}" alt="Hawaii" class="mx-auto w-10 h-10 mb-2">
+      <div class="text-sm font-semibold text-gray-700">夏威夷</div>
+    </a>
+
+  </div>
+</section>

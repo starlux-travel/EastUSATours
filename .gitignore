@@ -1,25 +1,39 @@
-# 忽略 Python 暫存與編譯
+# Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+*.so
 
-# SQLite 資料庫
-*.sqlite3
-
-# 虛擬環境相關
+# Virtual environment
 venv/
-.env
+.venv/
 
-# 編輯器相關
-.vscode/
+# Django
+*.log
+db.sqlite3
 
-# Django 遷移檔案自動生成
-migrations/
-
-# 翻譯暫存與編輯備份
+# i18n / 語系檔（保留 .po，忽略編譯與備份）
 locale/**/LC_MESSAGES/*.mo
 locale/**/LC_MESSAGES/*.po~
-locale/**/LC_MESSAGES/*.pot
+# 若 .pot 是自動產生且不想版控，打開下一行
+# locale/**/LC_MESSAGES/*.pot
 
-# 前端工具
+# Static / Media
+# 不忽略你的專案 static/，只忽略 collectstatic 的輸出目錄
+staticfiles/
+media/
+
+# IDE / Editor
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Node / Frontend
 node_modules/
+npm-debug.log
+yarn-error.log
+
+# Cache
 .cache/

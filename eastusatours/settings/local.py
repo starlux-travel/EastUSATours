@@ -1,13 +1,9 @@
 from .base import *
 
 DEBUG = True
+ALLOWED_HOSTS = ["*"]
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-]
-
-# SQLite 本地使用
+# 開發用 SQLite
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -15,8 +11,14 @@ DATABASES = {
     }
 }
 
-# 靜態檔案
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# ✅ 靜態檔修正：改用根目錄 static/
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR.parent / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Email (本地測試用 Console)
+# ✅ 媒體檔
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# 開發用 Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

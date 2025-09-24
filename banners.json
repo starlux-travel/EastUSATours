@@ -1,0 +1,35 @@
+[
+  {
+    "model": "tours.banner",
+    "pk": 1,
+    "fields": {
+      "title": "夏日促銷",
+      "image": "banners/banner1.jpg",
+      "link": "https://eastusatours.com/summer",
+      "order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tours.banner",
+    "pk": 2,
+    "fields": {
+      "title": "郵輪優惠",
+      "image": "banners/banner2.jpg",
+      "link": "https://eastusatours.com/cruise",
+      "order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "tours.banner",
+    "pk": 3,
+    "fields": {
+      "title": "亞洲旅遊",
+      "image": "banners/banner3.jpg",
+      "link": "https://eastusatours.com/asia",
+      "order": 3,
+      "is_active": true
+    }
+  }
+]

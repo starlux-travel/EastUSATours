@@ -1,0 +1,41 @@
+<div class="tab-scroll mb-4">
+  {% for tab in tabs %}
+    <button 
+      class="btn btn-lg inline-flex items-center px-4 py-2 shadow-sm rounded-sm me-2 tab-btn {% if forloop.first %}active{% endif %}"
+      data-bs-toggle="tab"
+      data-bs-target="#tab-{{ tab.slug }}"
+      type="button"
+      role="tab">
+
+      {% if tab.slug == "cruise" %}
+        <i class="bi bi-ship fs-4 me-2"></i>
+      {% elif tab.slug == "usa" %}
+        <i class="bi bi-building fs-4 me-2"></i>
+      {% elif tab.slug == "canada" %}
+        <i class="bi bi-tree fs-4 me-2"></i>
+      {% elif tab.slug == "asia" %}
+        <i class="bi bi-brightness-high fs-4 me-2"></i>
+      {% elif tab.slug == "europe" %}
+        <i class="bi bi-bank fs-4 me-2"></i>
+      {% endif %}
+
+      <span class="fw-bold">{{ tab.name }}</span>
+    </button>
+  {% endfor %}
+</div>
+
+<div class="tab-content bg-white p-4 border rounded shadow">
+  {% for tab in tabs %}
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+         id="tab-{{ tab.slug }}"
+         role="tabpanel">
+
+      {% if tab.slug == "cruise" %}
+        {% include "cruise/cruise_search.html" %}
+      {% else %}
+        {% include "partials/tours_search_box.html" with region=tab.slug %}
+      {% endif %}
+
+    </div>
+  {% endfor %}
+</div>

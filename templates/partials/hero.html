@@ -1,0 +1,32 @@
+<div class="relative w-full">
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      {% for banner in banners %}
+        <div class="swiper-slide relative">
+          <a href="{{ banner.link }}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}"
+                 class="w-full h-96 object-cover">
+            <div class="absolute bottom-6 left-6 bg-black bg-opacity-50 text-white px-4 py-2 rounded">
+              {{ banner.title }}
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Swiper 控制 -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<!-- 初始化 Swiper -->
+<script>
+  const swiper = new Swiper('.swiper-container', {
+    loop: true,
+    autoplay: { delay: 4000 },
+    pagination: { el: '.swiper-pagination', clickable: true },
+    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+  });
+</script>

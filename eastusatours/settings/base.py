@@ -5,16 +5,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-test-key-change-this-later"
 
 INSTALLED_APPS = [
-
+    # Django 內建
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    # ⚠️ 暫時註解掉，測試重複 sites 問題
-    # "django.contrib.sites",
+    "django.contrib.sites",   # ✅ 必須保留，Allauth 需要
 
     # 第三方套件
     "allauth",
@@ -90,8 +88,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ⚠️ 先拿掉 SITE_ID
-# SITE_ID = 1
+# ✅ 必須保留，否則 allauth 會失敗
+SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",

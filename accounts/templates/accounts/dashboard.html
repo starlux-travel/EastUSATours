@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>會員中心</h2>
+<p>歡迎 {{ user.username }}！</p>
+<a href="{% url 'orders' %}">我的訂單</a>
+<a href="{% url 'profile' %}">個人資料</a>
+{% endblock %}

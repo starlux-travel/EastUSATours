@@ -1,0 +1,152 @@
+[1mdiff --git a/eastusatours/settings/base.py b/eastusatours/settings/base.py[m
+[1mindex 35aaa52..857e0ba 100644[m
+[1m--- a/eastusatours/settings/base.py[m
+[1m+++ b/eastusatours/settings/base.py[m
+[36m@@ -1,60 +1,51 @@[m
+ from pathlib import Path[m
+ [m
+[31m-BASE_DIR = Path(__file__).resolve().parent.parent.parent[m
+[32m+[m[32mBASE_DIR = Path(__file__).resolve().parent.parent[m
+ [m
+[31m-# ⚠️ 請務必換成自己的隨機 SECRET_KEY[m
+[31m-# 生成方式：[m
+[31m-# python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"[m
+[31m-SECRET_KEY = "請換成自己的隨機 secret key"[m
+[31m-[m
+[31m-DEBUG = True[m
+[31m-[m
+[31m-ALLOWED_HOSTS = [][m
+[32m+[m[32mSECRET_KEY = "django-insecure-test-key-change-this-later"[m
+ [m
+ INSTALLED_APPS = [[m
+[32m+[m
+     "django.contrib.admin",[m
+     "django.contrib.auth",[m
+     "django.contrib.contenttypes",[m
+     "django.contrib.sessions",[m
+     "django.contrib.messages",[m
+     "django.contrib.staticfiles",[m
+[31m-    "django.contrib.sites",[m
+[31m-    "allauth",[m
+[31m-    "allauth.account",[m
+[31m-    "allauth.socialaccount",[m
+ [m
+[31m-    # 語言[m
+[31m-    "django.contrib.sites",[m
+[32m+[m[32m    # ⚠️ 暫時註解掉，測試重複 sites 問題[m
+[32m+[m[32m    # "django.contrib.sites",[m
+ [m
+[31m-    # Allauth[m
+[32m+[m[32m    # 第三方套件[m
+     "allauth",[m
+     "allauth.account",[m
+     "allauth.socialaccount",[m
+ [m
+[31m-    # 你的 Apps[m
+[31m-    "accounts",[m
+[31m-    "tours",[m
+[32m+[m[32m    # 你的應用[m
+[32m+[m[32m    "tours.apps.ToursConfig",[m
+[32m+[m[32m    "cruise.apps.CruiseConfig",[m
+ ][m
+ [m
+[31m-SITE_ID = 1[m
+ MIDDLEWARE = [[m
+     "django.middleware.security.SecurityMiddleware",[m
+     "django.contrib.sessions.middleware.SessionMiddleware",[m
+[31m-    "django.middleware.locale.LocaleMiddleware",  # 多語系 middleware[m
+[32m+[m[32m    "django.middleware.locale.LocaleMiddleware",[m
+     "django.middleware.common.CommonMiddleware",[m
+     "django.middleware.csrf.CsrfViewMiddleware",[m
+     "django.contrib.auth.middleware.AuthenticationMiddleware",[m
+[31m-    "allauth.account.middleware.AccountMiddleware",  # Allauth 新增[m
+     "django.contrib.messages.middleware.MessageMiddleware",[m
+     "django.middleware.clickjacking.XFrameOptionsMiddleware",[m
+[32m+[m
+[32m+[m[32m    # allauth 需要的 middleware[m
+[32m+[m[32m    "allauth.account.middleware.AccountMiddleware",[m
+ ][m
+ [m
+ ROOT_URLCONF = "eastusatours.urls"[m
+ [m
+[31m-TEMPLATES = [[m
+[32m+[m[32mTEMPLATES  = [[m
+     {[m
+         "BACKEND": "django.template.backends.django.DjangoTemplates",[m
+[31m-        "DIRS": [BASE_DIR / "templates"],[m
+[32m+[m[32m        "DIRS": [BASE_DIR.parent / "templates"],[m
+         "APP_DIRS": True,[m
+         "OPTIONS": {[m
+             "context_processors": [[m
+[36m@@ -68,48 +59,41 @@[m [mTEMPLATES = [[m
+ ][m
+ [m
+ WSGI_APPLICATION = "eastusatours.wsgi.application"[m
+[31m-ASGI_APPLICATION = "eastusatours.asgi.application"[m
+[31m-[m
+[31m-# Database (你應該在 local.py / production.py 覆寫)[m
+[31m-DATABASES = {[m
+[31m-    "default": {[m
+[31m-        "ENGINE": "django.db.backends.sqlite3",[m
+[31m-        "NAME": BASE_DIR / "db.sqlite3",[m
+[31m-    }[m
+[31m-}[m
+[31m-[m
+[31m-# 語言與時區[m
+[31m-LANGUAGE_CODE = "zh-hant"[m
+ [m
+[32m+[m[32m# ---------------------------[m
+[32m+[m[32m# 語言 / 國際化[m
+[32m+[m[32m# ---------------------------[m
+ LANGUAGES = [[m
+[31m-    ("zh-hant", "繁體中文"),[m
+[31m-    ("zh-hans", "简体中文"),[m
+[32m+[m[32m    ("zh-hant", "Traditional Chinese"),[m
+[32m+[m[32m    ("zh-hans", "Simplified Chinese"),[m
+     ("en", "English"),[m
+ ][m
+ [m
+[31m-TIME_ZONE = "UTC"[m
+[32m+[m[32mLOCALE_PATHS = [BASE_DIR / "locale"][m
+ [m
+[32m+[m[32mLANGUAGE_CODE = "en"[m
+[32m+[m[32mTIME_ZONE = "UTC"[m
+ USE_I18N = True[m
+ USE_TZ = True[m
+ [m
+[31m-LOCALE_PATHS = [[m
+[31m-    BASE_DIR / "locale",[m
+[31m-][m
+[31m-[m
+[31m-# Static & Media[m
+[31m-STATIC_URL = "/static/"[m
+[31m-STATICFILES_DIRS = [BASE_DIR / "static"][m
+[32m+[m[32m# ---------------------------[m
+[32m+[m[32m# 靜態檔案設定[m
+[32m+[m[32m# ---------------------------[m
+[32m+[m[32mSTATICFILES_DIRS = [BASE_DIR / "static"]   # 專案內的 static/[m
+ STATIC_ROOT = BASE_DIR / "staticfiles"[m
+ [m
+[32m+[m[32m# ---------------------------[m
+[32m+[m[32m# 媒體檔案設定[m
+[32m+[m[32m# ---------------------------[m
+ MEDIA_URL = "/media/"[m
+ MEDIA_ROOT = BASE_DIR / "media"[m
+ [m
+[31m-# Allauth[m
+[31m-SITE_ID = 1[m
+[31m-LOGIN_REDIRECT_URL = "/accounts/dashboard/"[m
+[31m-ACCOUNT_LOGOUT_REDIRECT_URL = "/"[m
+[31m-ACCOUNT_AUTHENTICATION_METHOD = "username_email"[m
+[31m-ACCOUNT_EMAIL_REQUIRED = True[m
+[31m-ACCOUNT_EMAIL_VERIFICATION = "optional"[m
+[31m-[m
+ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"[m
+[32m+[m
+[32m+[m[32m# ⚠️ 先拿掉 SITE_ID[m
+[32m+[m[32m# SITE_ID = 1[m
+[32m+[m
+[32m+[m[32mAUTHENTICATION_BACKENDS = [[m
+[32m+[m[32m    "django.contrib.auth.backends.ModelBackend",[m
+[32m+[m[32m    "allauth.account.auth_backends.AuthenticationBackend",[m
+[32m+[m[32m][m
