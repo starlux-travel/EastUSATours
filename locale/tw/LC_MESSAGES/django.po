@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: EastUSATours 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-27 00:00+0000\n"
+"PO-Revision-Date: 2025-09-27 00:00+0000\n"
+"Last-Translator: EastUSATours <info@eastusatours.com>\n"
+"Language-Team: Chinese (Traditional)\n"
+"Language: tw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# ======================
+# 範例翻譯 (你可以自己新增更多)
+# ======================
+
+#: templates/partials/navbar.html:30
+msgid "郵輪假期"
+msgstr "郵輪假期"
+
+#: templates/partials/navbar.html:40
+msgid "美國旅遊"
+msgstr "美國旅遊"
+
+#: templates/partials/navbar.html:50
+msgid "加拿大旅遊"
+msgstr "加拿大旅遊"
+
+#: templates/partials/navbar.html:60
+msgid "歐洲旅遊"
+msgstr "歐洲旅遊"
+
+#: templates/partials/navbar.html:70
+msgid "亞洲"
+msgstr "亞洲"
+
+#: templates/partials/navbar.html:80
+msgid "客製包團"
+msgstr "客製包團"
+
+#: templates/partials/footer.html:15
+msgid "快速連結"
+msgstr "快速連結"
+
+#: templates/partials/footer.html:20
+msgid "關於我們"
+msgstr "關於我們"
+
+#: templates/partials/footer.html:21
+msgid "服務條款"
+msgstr "服務條款"
+
+#: templates/partials/footer.html:22
+msgid "隱私政策"
+msgstr "隱私政策"
+
+#: templates/partials/footer.html:30
+msgid "聯絡我們"
+msgstr "聯絡我們"
+
+#: templates/partials/footer.html:50
+msgid "版權所有"
+msgstr "版權所有"

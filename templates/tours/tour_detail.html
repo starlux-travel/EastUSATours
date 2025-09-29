@@ -1,12 +1,42 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load i18n %}
+
+{% block title %}{{ tour.title }} - {% trans "行程詳情" %}{% endblock %}
+
 {% block content %}
-<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
-  <h2 class="text-xl font-bold mb-4">會員中心</h2>
-  <p class="mb-6">歡迎回來！您可以在此查看您的個人資料和訂單記錄。</p>
-  <ul class="space-y-2 list-disc list-inside">
-      <li><a href="{% url 'accounts:profile' %}" class="text-blue-600 hover:underline">個人資料</a></li>
-      <li><a href="{% url 'accounts:orders' %}" class="text-blue-600 hover:underline">我的訂單</a></li>
-  </ul>
+<div class="container mx-auto px-6 py-10">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- 圖片 -->
+    <div>
+      <img src="{{ tour.image.url|default:'https://via.placeholder.com/600x400' }}"
+           alt="{{ tour.title }}"
+           class="rounded shadow">
+    </div>
+
+    <!-- 文字資訊 -->
+    <div>
+      <h1 class="text-2xl font-bold mb-4">{{ tour.title }}</h1>
+      <p class="text-gray-700 mb-4">{{ tour.desc|default:_("暫無說明") }}</p>
+      <p class="text-lg font-semibold text-green-600 mb-2">
+        ${{ tour.price }}
+      </p>
+
+      {% if tour.departure_date %}
+        <p class="text-sm text-gray-600">
+          {% trans "出發日期" %}：{{ tour.departure_date }}
+        </p>
+      {% endif %}
+
+      {% if tour.city %}
+        <p class="text-sm text-gray-600">
+          {% trans "出發城市" %}：{{ tour.city.name }}
+        </p>
+      {% endif %}
+
+      <a href="#" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+        {% trans "立即預訂" %}
+      </a>
+    </div>
+  </div>
 </div>
 {% endblock %}

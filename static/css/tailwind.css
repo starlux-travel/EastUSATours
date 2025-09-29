@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -1248,3 +1249,8 @@ video {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
+=======
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+>>>>>>> recover-tours

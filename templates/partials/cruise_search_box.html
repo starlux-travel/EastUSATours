@@ -1,0 +1,75 @@
+{% load i18n %}
+
+<form method="get" action="{% url 'cruise:cruise_search' %}" 
+      class="grid grid-cols-1 md:grid-cols-6 gap-4">
+
+  <!-- 公司 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "公司" %}</label>
+    <select name="line" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      {% for line in cruise_lines %}
+        <option value="{{ line }}">{{ line }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 地區 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "地區" %}</label>
+    <select name="region" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      {% for region in cruise_regions %}
+        <option value="{{ region.id }}">{{ region.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 港口 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "港口" %}</label>
+    <select name="port" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      {% regroup cruise_ports by region.name as port_groups %}
+      {% for group in port_groups %}
+        <optgroup label="{{ group.grouper }}">
+          {% for port in group.list %}
+            <option value="{{ port.id }}">{{ port.name }}</option>
+          {% endfor %}
+        </optgroup>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 月份 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "月份" %}</label>
+    <input type="month" name="month" class="border rounded px-2 py-1 w-full">
+  </div>
+
+  <!-- 中文導遊 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "中文導遊" %}</label>
+    <select name="chinese" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      <option value="1">{% trans "需要" %}</option>
+    </select>
+  </div>
+
+  <!-- 特價 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "特價" %}</label>
+    <select name="special" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      <option value="1">{% trans "特價" %}</option>
+    </select>
+  </div>
+
+  <!-- 提交按鈕 -->
+  <div class="md:col-span-6 text-right">
+    <button type="submit"
+            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+      {% trans "搜尋" %}
+    </button>
+  </div>
+</form>

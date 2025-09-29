@@ -1,99 +1,86 @@
 {% extends "base.html" %}
+{% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "EastUSATours 首頁" %}{% endblock %}
+{% block title %}EastUSA Tours - {% trans "首頁" %}{% endblock %}
 
 {% block content %}
-  <!-- Hero Banner -->
-  <section class="relative bg-blue-100">
-    <div class="container mx-auto py-10 text-center">
-      <h1 class="text-4xl font-bold mb-4">{% trans "EastUSATours 郵輪假期" %}</h1>
-      <p class="text-lg mb-6">{% trans "從海上開始，探索世界！" %}</p>
-      <a href="{% url 'tour_list' %}?tour_type=cruise_tour" 
-         class="px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700">
-        {% trans "立即查看郵輪行程" %}
-      </a>
-    </div>
-  </section>
 
-  <!-- 搜尋區塊 -->
-  <section class="container mx-auto py-8">
-    <div class="bg-white shadow p-6 rounded">
-      <form method="get" action="{% url 'tour_list' %}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <select name="tour_type" class="border p-2 rounded">
-          <option value="cruise_tour" selected>🛳 {% trans "郵輪" %}</option>
-          <option value="bus_tour">🚌 {% trans "巴士團" %}</option>
-        </select>
-        <input type="text" name="region" placeholder="{% trans '輸入城市/Region' %}" class="border p-2 rounded">
-        <input type="number" name="days" placeholder="{% trans '天數' %}" class="border p-2 rounded">
-        <button type="submit" class="bg-green-600 text-white rounded px-4 py-2">
-          {% trans "搜尋" %}
-        </button>
-      </form>
-    </div>
-  </section>
+<!-- 🔹 Banner 輪播 -->
+<div class="container mx-auto px-6 mb-8">
+  {% for banner in banners %}
+    <a href="{{ banner.link|default:'#' }}">
+      <img src="{{ banner.image.url }}" alt="{{ banner.title }}" 
+           class="w-full h-64 md:h-96 object-cover rounded-lg shadow">
+    </a>
+  {% empty %}
+    <p class="text-center text-gray-500">{% trans "目前沒有 Banner" %}</p>
+  {% endfor %}
+</div>
 
-  <!-- 郵輪專區 -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold mb-6">{% trans "熱門郵輪航線" %}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for tour in tours_cruise %}
-        <div class="border rounded shadow p-4">
-          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
-          <h3 class="font-bold">{{ tour.title }}</h3>
-          <p class="text-red-600">${{ tour.price }}</p>
-        </div>
-      {% empty %}
-        <p class="text-gray-600">{% trans "目前沒有郵輪行程" %}</p>
-      {% endfor %}
-    </div>
-  </section>
+<!-- 🔹 搜尋器 Tabs -->
+<div class="container mx-auto px-6">
+  {% include "partials/search_box_tabs.html" %}
+</div>
 
-  <!-- 熱門行程 -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-2xl font-bold mb-4">{% trans "熱門行程" %}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for tour in hot_tours %}
-        <div class="border rounded shadow p-4">
-          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
-          <h3 class="font-bold">{{ tour.title }}</h3>
-          <p class="text-gray-600">${{ tour.price }}</p>
-        </div>
-      {% empty %}
-        <p class="text-gray-600">{% trans "目前沒有熱門行程" %}</p>
-      {% endfor %}
-    </div>
-  </section>
+<!-- 🔹 熱門目的地 -->
+<div class="container mx-auto px-6 py-10">
+  {% include "partials/popular_regions.html" %}
+</div>
 
-  <!-- 美國巴士 -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-2xl font-bold mb-6">{% trans "美國巴士團" %}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for tour in tours_us %}
-        <div class="border rounded shadow p-4">
-          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
-          <h3 class="font-bold">{{ tour.title }}</h3>
-          <p class="text-gray-600">${{ tour.price }}</p>
-        </div>
-      {% empty %}
-        <p class="text-gray-600">{% trans "目前沒有巴士行程" %}</p>
-      {% endfor %}
-    </div>
-  </section>
+<!-- 🔹 人氣排行 -->
+<section class="container mx-auto px-6 py-10 bg-gray-50 rounded-lg shadow-sm">
+  <h2 class="text-xl font-bold mb-6">{% trans "人氣排行" %}</h2>
+  <ul class="space-y-2 text-sm text-gray-700">
+    {% for tour in popular_tours %}
+      <li>
+        <a href="{% url 'tours:tour_detail' tour.pk %}" class="hover:text-blue-600">
+          {{ tour.title }}
+        </a>
+      </li>
+    {% empty %}
+      <li>{% trans "目前沒有行程" %}</li>
+    {% endfor %}
+  </ul>
+</section>
 
-  <!-- 歐洲旅遊 -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-2xl font-bold mb-6">{% trans "歐洲旅遊" %}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for tour in tours_eu %}
-        <div class="border rounded shadow p-4">
-          <img src="{{ tour.image }}" alt="{{ tour.title }}" class="w-full h-48 object-cover mb-3">
-          <h3 class="font-bold">{{ tour.title }}</h3>
-          <p class="text-gray-600">${{ tour.price }}</p>
-        </div>
-      {% empty %}
-        <p class="text-gray-600">{% trans "目前沒有歐洲行程" %}</p>
-      {% endfor %}
-    </div>
-  </section>
+<!-- 🔹 精選熱門行程 -->
+<section class="container mx-auto px-6 py-10">
+  <h2 class="text-xl font-bold mb-6">{% trans "精選熱門行程" %}</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for tour in featured_tours %}
+      {% include "partials/tour_card.html" with tour=tour %}
+    {% empty %}
+      <p>{% trans "目前沒有精選行程" %}</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 🔹 精選郵輪 -->
+<section class="container mx-auto px-6 py-10">
+  <h2 class="text-xl font-bold mb-6">{% trans "精選郵輪" %}</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for cruise in featured_cruises %}
+      {% include "partials/cruise_card.html" with cruise=cruise %}
+    {% empty %}
+      <p>{% trans "目前沒有精選郵輪" %}</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 🔹 FAQ -->
+<section class="faq container mx-auto px-6 py-10">
+  <h2 class="text-xl font-bold mb-6">{% trans "常見問題" %}</h2>
+  <ul class="space-y-4">
+    {% for faq in faqs %}
+      <li class="bg-white p-4 rounded shadow-sm">
+        <strong class="block">{{ faq.question }}</strong>
+        <p class="text-gray-600">{{ faq.answer }}</p>
+      </li>
+    {% empty %}
+      <p class="text-gray-500">{% trans "目前沒有常見問題" %}</p>
+    {% endfor %}
+  </ul>
+</section>
+
 {% endblock %}
