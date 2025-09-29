@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<div class="p-4 border rounded bg-white shadow hover:shadow-lg transition">
+  <a href="{% url 'tours:tour_detail' tour.pk %}">
+    <img src="{{ tour.image.url|default:'https://via.placeholder.com/400x200' }}"
+         alt="{{ tour.title }}"
+         class="mb-2 w-full h-40 object-cover rounded">
+  </a>
+  <h3 class="text-sm font-semibold line-clamp-2">{{ tour.title }}</h3>
+  <p class="text-gray-600 text-xs">${{ tour.price }}</p>
+
+  {% if tour.is_promo %}
+    <span class="inline-block mt-1 px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded">
+      {% trans "促銷中" %}
+    </span>
+  {% endif %}
+</div>

@@ -1,0 +1,55 @@
+{% load static %} {% load i18n %}
+
+<div class="bg-white shadow-lg rounded-lg p-6 mt-6">
+  <!-- Tabs -->
+  <ul class="flex border-b mb-4 text-gray-600 font-medium">
+    <li class="mr-4">
+      <button
+        class="tab-link active px-3 py-2 border-b-2 border-green-600 text-green-600"
+        data-target="cruise"
+      >
+        {% trans "郵輪假期" %}
+      </button>
+    </li>
+    <li class="mr-4">
+      <button
+        class="tab-link px-3 py-2 hover:text-green-600"
+        data-target="tours"
+      >
+        {% trans "陸上行程" %}
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Contents -->
+  <div id="cruise" class="tab-content active">
+    {% include "partials/cruise_search_box.html" %}
+  </div>
+
+  <div id="tours" class="tab-content hidden">
+    {% include "partials/tours_search_box.html" %}
+  </div>
+</div>
+
+<!-- 🔧 Tab 切換 JS -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabs = document.querySelectorAll(".tab-link");
+    const contents = document.querySelectorAll(".tab-content");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        // reset tabs
+        tabs.forEach((t) =>
+          t.classList.remove("text-green-600", "border-green-600", "active")
+        );
+        tab.classList.add("text-green-600", "border-green-600", "active");
+
+        // reset contents
+        contents.forEach((c) => c.classList.add("hidden"));
+        const target = document.getElementById(tab.dataset.target);
+        if (target) target.classList.remove("hidden");
+      });
+    });
+  });
+</script>

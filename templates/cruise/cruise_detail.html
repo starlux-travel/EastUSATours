@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ cruise.title }} - {% trans "郵輪詳情" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- 圖片 -->
+    <div>
+      <img src="{{ cruise.image.url|default:'https://via.placeholder.com/600x400' }}"
+           alt="{{ cruise.title }}"
+           class="rounded shadow">
+    </div>
+
+    <!-- 文字資訊 -->
+    <div>
+      <h1 class="text-2xl font-bold mb-4">{{ cruise.title }}</h1>
+      <p class="text-gray-700 mb-4">{{ cruise.desc|default:_("暫無說明") }}</p>
+      <p class="text-lg font-semibold text-green-600 mb-2">
+        ${{ cruise.price }}
+      </p>
+
+      {% if cruise.departure_date %}
+        <p class="text-sm text-gray-600">
+          {% trans "出發日期" %}：{{ cruise.departure_date }}
+        </p>
+      {% endif %}
+
+      {% if cruise.port %}
+        <p class="text-sm text-gray-600">
+          {% trans "出發港口" %}：{{ cruise.port.name }}
+        </p>
+      {% endif %}
+
+      {% if cruise.line %}
+        <p class="text-sm text-gray-600">
+          {% trans "公司" %}：{{ cruise.line }}
+        </p>
+      {% endif %}
+
+      {% if cruise.has_chinese %}
+        <p class="text-sm text-blue-600">
+          ✅ {% trans "提供中文導遊" %}
+        </p>
+      {% endif %}
+
+      {% if cruise.is_special %}
+        <p class="text-sm text-red-600">
+          🔥 {% trans "特價航程" %}
+        </p>
+      {% endif %}
+
+      <a href="#" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+        {% trans "立即預訂" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

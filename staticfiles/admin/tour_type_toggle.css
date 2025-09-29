@@ -1,0 +1,5 @@
+fieldset.bus-only, fieldset.cruise-only {
+  border: 1px solid #e9ecef;
+}
+fieldset.bus-only > h2, fieldset.bus-only > .module > h2 { color: #0a7b5f; }
+fieldset.cruise-only > h2, fieldset.cruise-only > .module > h2 { color: #0a58ca; }

@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
 
+app_name = "cruise"
+
 urlpatterns = [
-    path("search/", views.cruise_search, name="cruise_search"),   # 🔍 搜尋
-    path("list/", views.cruise_list, name="cruise_list"),         # 📋 列表
-    path("<int:pk>/", views.cruise_detail, name="cruise_detail"), # 📌 詳細
+    path("", views.cruise_list, name="list"),                 # /cruise/
+    path("search/", views.cruise_search, name="cruise_search"),  # /cruise/search/
+    path("<int:pk>/", views.cruise_detail, name="detail"),    # /cruise/1/
 ]

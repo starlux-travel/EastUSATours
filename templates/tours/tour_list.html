@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% if search_mode %}{% trans "搜尋結果" %}{% else %}{% trans "行程列表" %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+  <h2 class="text-2xl font-bold mb-6">
+    {% if search_mode %}
+      {% trans "搜尋結果" %}{% if keyword %} - "{{ keyword }}"{% endif %}
+    {% else %}
+      {% trans "精選行程" %}
+    {% endif %}
+  </h2>
+
+  {% if tours %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for tour in tours %}
+        {% include "partials/tour_card.html" with tour=tour %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-500">{% trans "沒有找到符合條件的行程。" %}</p>
+  {% endif %}
+</div>
+{% endblock %}

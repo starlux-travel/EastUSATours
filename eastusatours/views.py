@@ -1,20 +1,73 @@
-from django.shortcuts import render
-from tours.models import Tour
+from django.shortcuts import render, get_object_or_404
+from datetime import datetime
 
-def home(request):
-    # 郵輪
-    tours_cruise = Tour.objects.filter(tour_type="cruise_tour")[:6]
-    # 熱門行程（先簡單用 price 排序模擬）
-    hot_tours = Tour.objects.order_by("-id")[:6]
-    # 美國巴士
-    tours_us = Tour.objects.filter(tour_type="bus_tour")[:6]
-    # 歐洲（假設 category 欄位未來可用，先放空或用標籤）
-    tours_eu = Tour.objects.none()
+# ✅ 匯入模型
+from core.models import Banner, FAQ
+from tours.models import Tour
+from cruise.models import CruiseTour
+
+
+# ======================
+# 首頁
+# ======================
+def home(request, lang_code=None):
+    banners = Banner.objects.filter(is_active=True).order_by("order")
+    faqs = FAQ.objects.all().order_by("order")
+    tours = Tour.objects.all()[:6]
+    cruises = CruiseTour.objects.all()[:6]
+    popular_tours = Tour.objects.order_by("-views_count")[:5]
 
     context = {
-        "tours_cruise": tours_cruise,
-        "hot_tours": hot_tours,
-        "tours_us": tours_us,
-        "tours_eu": tours_eu,
+        "banners": banners,
+        "faqs": faqs,
+        "featured_tours": tours,
+        "featured_cruises": cruises,
+        "popular_tours": popular_tours,
+        "lang_code": lang_code,  # 可以傳給模板用
     }
-    return render(request, "tours/home_guest.html", context)
+    return render(request, "home.html", context)
+
+
+# ======================
+# 郵輪列表
+# ======================
+def cruise_list(request):
+    cruises = CruiseTour.objects.all()
+    return render(request, "cruise/cruise_list.html", {"cruises": cruises})
+
+
+# ======================
+# 郵輪搜尋
+# ======================
+def cruise_search(request):
+    query = request.GET.get("q")
+    city = request.GET.get("city")
+    depart_date = request.GET.get("depart_date")
+
+    cruises = CruiseTour.objects.all()
+
+    if query:
+        cruises = cruises.filter(title__icontains=query)
+
+    if city:
+        cruises = cruises.filter(description__icontains=city)
+
+    if depart_date:
+        try:
+            date_obj = datetime.strptime(depart_date, "%Y-%m-%d")
+            cruises = cruises.filter(
+                departure_date__year=date_obj.year,
+                departure_date__month=date_obj.month
+            )
+        except ValueError:
+            pass
+
+    return render(request, "cruise/cruise_search.html", {"cruises": cruises})
+
+
+# ======================
+# 郵輪詳細
+# ======================
+def cruise_detail(request, pk):
+    cruise = get_object_or_404(CruiseTour, pk=pk)
+    return render(request, "cruise/cruise_detail.html", {"cruise": cruise})

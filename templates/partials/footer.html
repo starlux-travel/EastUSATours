@@ -1,7 +1,53 @@
-{% load i18n %}
-<footer>
-  <div class="container">
-    &copy; {% now "Y" %} EastUSATours. {% trans "All rights reserved." %}
+{% load static %}
+
+<footer class="bg-gray-100 text-gray-700 mt-10 border-t">
+  <div class="container mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- 公司資訊 -->
+    <div>
+      <h2 class="font-bold text-lg mb-2">EastUSA Tours</h2>
+      <p class="text-sm">提供北美與全球專業旅遊服務：巴士團、郵輪、機加酒、簽證、客製行程</p>
+      <p class="text-sm mt-2">📧 info@eastusatours.com</p>
+      <p class="text-sm">📞 +1 (646) 666-7914</p>
+    </div>
+
+    <!-- 快速連結 -->
+    <div>
+      <h2 class="font-bold text-lg mb-2">快速連結</h2>
+      <ul class="text-sm space-y-1">
+        <li><a href="/tw/">首頁</a></li>
+        <li><a href="/tours/">行程查詢</a></li>
+        <li><a href="/accounts/login/">會員登入</a></li>
+        <li><a href="/accounts/signup/">會員註冊</a></li>
+      </ul>
+    </div>
+
+    <!-- 社群媒體 -->
+    <div>
+      <h2 class="font-bold text-lg mb-2">聯絡我們</h2>
+      <div class="flex space-x-4">
+        <a href="mailto:info@eastusatours.com">
+          <img src="{% static 'images/icon-email.png' %}" alt="Email" class="h-8 w-8">
+        </a>
+        <a href="https://facebook.com/" target="_blank">
+          <img src="{% static 'images/icon-fb.png' %}" alt="Facebook" class="h-8 w-8">
+        </a>
+        <a href="https://wa.me/16466667914" target="_blank">
+          <img src="{% static 'images/icon-whatsapp.png' %}" alt="WhatsApp" class="h-8 w-8">
+        </a>
+        <a href="https://wechat.com/" target="_blank">
+          <img src="{% static 'images/icon-wechat.png' %}" alt="WeChat" class="h-8 w-8">
+        </a>
+        <a href="https://instagram.com/" target="_blank">
+          <img src="{% static 'images/icon-ig.png' %}" alt="Instagram" class="h-8 w-8">
+        </a>
+        <a href="https://line.me/" target="_blank">
+          <img src="{% static 'images/icon-line.png' %}" alt="Line" class="h-8 w-8">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center text-sm text-gray-500 py-4 border-t">
+    © 2025 EastUSA Tours. All rights reserved.
   </div>
 </footer>
-

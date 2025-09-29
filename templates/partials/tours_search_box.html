@@ -1,0 +1,61 @@
+{% load i18n %}
+
+<form method="get" action="{% url 'tours:tour_search' %}" 
+      class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+  <!-- 出發城市 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "出發城市" %}</label>
+    <select name="city" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      {% for region in departure_regions %}
+        <optgroup label="{{ region.name }}">
+          {% for city in region.cities.all %}
+            <option value="{{ city.id }}">{{ city.name }}</option>
+          {% endfor %}
+        </optgroup>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 目的地區域 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "目的地" %}</label>
+    <select name="region" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      {% for region in tour_regions %}
+        <option value="{{ region.id }}">{{ region.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 出發日期 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "出發日期" %}</label>
+    <input type="date" name="date" class="border rounded px-2 py-1 w-full">
+  </div>
+
+  <!-- 促銷 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "促銷" %}</label>
+    <select name="promo" class="border rounded px-2 py-1 w-full">
+      <option value="">{% trans "不限" %}</option>
+      <option value="1">{% trans "有促銷" %}</option>
+    </select>
+  </div>
+
+  <!-- 關鍵字 -->
+  <div>
+    <label class="block text-sm text-gray-600 mb-1">{% trans "關鍵字" %}</label>
+    <input type="text" name="q" placeholder="{% trans '輸入行程名稱或關鍵字' %}"
+           class="border rounded px-2 py-1 w-full">
+  </div>
+
+  <!-- 提交按鈕 -->
+  <div class="md:col-span-5 text-right">
+    <button type="submit"
+            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+      {% trans "搜尋" %}
+    </button>
+  </div>
+</form>

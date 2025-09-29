@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div class="p-4 border rounded bg-white shadow hover:shadow-lg transition">
+  <a href="{% url 'cruise:cruise_detail' cruise.pk %}">
+    <img src="{{ cruise.image.url|default:'https://via.placeholder.com/400x200' }}"
+         alt="{{ cruise.title }}"
+         class="mb-2 w-full h-40 object-cover rounded">
+  </a>
+  <h3 class="text-sm font-semibold line-clamp-2">{{ cruise.title }}</h3>
+  <p class="text-gray-600 text-xs">${{ cruise.price }}</p>
+
+  {% if cruise.has_chinese %}
+    <span class="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-blue-600 text-xs rounded">
+      {% trans "中文導遊" %}
+    </span>
+  {% endif %}
+
+  {% if cruise.is_special %}
+    <span class="inline-block mt-1 px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded">
+      {% trans "特價" %}
+    </span>
+  {% endif %}
+</div>

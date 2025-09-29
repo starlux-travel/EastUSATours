@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% if search_mode %}{% trans "郵輪搜尋結果" %}{% else %}{% trans "精選郵輪" %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-10">
+  <h2 class="text-2xl font-bold mb-6">
+    {% if search_mode %}
+      {% trans "郵輪搜尋結果" %}
+    {% else %}
+      {% trans "精選郵輪" %}
+    {% endif %}
+  </h2>
+
+  {% if cruises %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for cruise in cruises %}
+        {% include "partials/cruise_card.html" with cruise=cruise %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-500">{% trans "沒有找到符合條件的郵輪。" %}</p>
+  {% endif %}
+</div>
+{% endblock %}

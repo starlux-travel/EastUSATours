@@ -1,28 +1,64 @@
-# eastusatours/admin.py
 from django.contrib import admin
-from .models import Tour
-from django import forms
+from tours.models import DepartureRegion, DepartureCity, Tour
+from cruise.models import CruiseRegion, CruisePort, CruiseTour, Banner
 
-class TourAdminForm(forms.ModelForm):
-    copy_to_zh_cn = forms.BooleanField(required=False, label="複製繁中 → 簡中")
-    copy_to_en = forms.BooleanField(required=False, label="複製繁中 → 英文")
 
-    class Meta:
-        model = Tour
-        fields = '__all__'
+# ========== Tours ==========
+@admin.register(DepartureRegion)
+class DepartureRegionAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get("copy_to_zh_cn"):
-            cleaned_data["title_zh_cn"] = cleaned_data.get("title_zh_tw", "")
-            cleaned_data["description_zh_cn"] = cleaned_data.get("description_zh_tw", "")
-        if cleaned_data.get("copy_to_en"):
-            cleaned_data["title_en"] = cleaned_data.get("title_zh_tw", "")
-            cleaned_data["description_en"] = cleaned_data.get("description_zh_tw", "")
-        return cleaned_data
 
+@admin.register(DepartureCity)
+class DepartureCityAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "region")
+    list_filter = ("region",)
+    search_fields = ("name", "region__name")
+
+
+@admin.register(Tour)
 class TourAdmin(admin.ModelAdmin):
-    form = TourAdminForm
-    list_display = ('title_zh_tw', 'is_featured')
+    list_display = ("id", "title_zh_tw", "title_zh_cn", "title_en", "is_featured")
+    search_fields = ("title_zh_tw", "title_zh_cn", "title_en")
+    list_filter = ("is_featured", "departure_city", "departure_region")
 
-admin.site.register(Tour, TourAdmin)
+
+# ========== Cruise ==========
+@admin.register(CruiseRegion)
+class CruiseRegionAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    search_fields = ("name",)
+
+
+@admin.register(CruisePort)
+class CruisePortAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "region")
+    list_filter = ("region",)
+    search_fields = ("name", "region__name")
+
+
+@admin.register(CruiseTour)
+class CruiseTourAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "title_zh_tw",
+        "title_zh_cn",
+        "title_en",
+        "departure_region",
+        "departure_port",
+        "departure_date",
+        "price",
+        "is_active",
+    )
+    list_filter = ("departure_region", "departure_port", "is_active")
+    search_fields = ("title_zh_tw", "title_zh_cn", "title_en")
+
+
+# ========== Banner ==========
+@admin.register(Banner)
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ("title", "order", "is_active")
+    list_editable = ("order", "is_active")
+    search_fields = ("title",)
+    ordering = ("order",)

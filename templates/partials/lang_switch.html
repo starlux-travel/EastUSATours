@@ -1,0 +1,14 @@
+<div class="flex space-x-2">
+  <a href="/tw/"
+     class="{% if request.LANGUAGE_CODE == 'zh-hant' %}font-bold text-green-600{% endif %}">
+    繁中
+  </a>
+  <a href="/cn/"
+     class="{% if request.LANGUAGE_CODE == 'zh-hans' %}font-bold text-green-600{% endif %}">
+    简中
+  </a>
+  <a href="/en/"
+     class="{% if request.LANGUAGE_CODE == 'en' %}font-bold text-green-600{% endif %}">
+    EN
+  </a>
+</div>

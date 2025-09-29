@@ -1,45 +1,55 @@
 from django.shortcuts import render, get_object_or_404
-from .models import CruiseTour
+from datetime import datetime
+from .models import CruiseTour, CruiseRegion, CruisePort
 
-
-# 🔍 搜尋郵輪
-def cruise_search(request):
-    keyword = request.GET.get("keyword", "")
-    depart_date = request.GET.get("depart_date", "")
-    city = request.GET.get("city", "")
-    region = request.GET.get("region", "")
-
-    cruises = CruiseTour.objects.filter(is_active=True)
-
-    if keyword:
-        cruises = cruises.filter(title__icontains=keyword)
-    if city:
-        cruises = cruises.filter(city__icontains=city)
-    if region:
-        cruises = cruises.filter(region__name__icontains=region)
-    if depart_date:
-        cruises = cruises.filter(depart_date=depart_date)
-
-    return render(request, "cruise/cruise_list.html", {
-        "cruises": cruises,
-        "search_mode": True,
-        "selected_city": city,
-        "selected_date": depart_date,
-        "keyword": keyword,
-        "region": region,
-    })
-
-
-# 📋 郵輪列表
+# 郵輪列表
 def cruise_list(request):
-    cruises = CruiseTour.objects.filter(is_active=True).order_by("-id")
-    return render(request, "cruise/cruise_list.html", {
-        "cruises": cruises,
-        "search_mode": False,
-    })
+    cruises = CruiseTour.objects.all().order_by("-id")
+    return render(request, "cruise/cruise_list.html", {"cruises": cruises})
 
 
-# 📌 郵輪詳細
+# 郵輪搜尋
+def cruise_search(request):
+    q = request.GET.get("q")
+    line = request.GET.get("line")
+    region_id = request.GET.get("region")
+    port_id = request.GET.get("port")
+    month = request.GET.get("month")
+    chinese = request.GET.get("chinese")
+    special = request.GET.get("special")
+
+    cruises = CruiseTour.objects.all()
+
+    if q:
+        cruises = cruises.filter(title__icontains=q) | cruises.filter(desc__icontains=q)
+
+    if line:
+        cruises = cruises.filter(line__icontains=line)
+
+    if region_id:
+        cruises = cruises.filter(port__region_id=region_id)
+
+    if port_id:
+        cruises = cruises.filter(port_id=port_id)
+
+    if month:
+        try:
+            date_obj = datetime.strptime(month, "%Y-%m")
+            cruises = cruises.filter(departure_date__year=date_obj.year,
+                                     departure_date__month=date_obj.month)
+        except ValueError:
+            pass
+
+    if chinese == "1":
+        cruises = cruises.filter(has_chinese=True)
+
+    if special == "1":
+        cruises = cruises.filter(is_special=True)
+
+    return render(request, "cruise/cruise_list.html", {"cruises": cruises, "search_mode": True})
+
+
+# 郵輪詳細
 def cruise_detail(request, pk):
     cruise = get_object_or_404(CruiseTour, pk=pk)
     return render(request, "cruise/cruise_detail.html", {"cruise": cruise})
