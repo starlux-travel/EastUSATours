@@ -4,12 +4,10 @@ import sys
 from pathlib import Path
 
 def main():
-<<<<<<< HEAD
     """Django's command-line utility for administrative tasks."""
     BASE_DIR = Path(__file__).resolve().parent
     sys.path.append(str(BASE_DIR))   # 確保 eastusatours package 能被找到
-=======
-    """Run administrative tasks."""
+
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eastusatours.settings.base")
     try:
         from django.core.management import execute_from_command_line
@@ -19,12 +17,6 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    execute_from_command_line(sys.argv)
->>>>>>> recover-tours
-
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eastusatours.settings")
-
-    from django.core.management import execute_from_command_line
     execute_from_command_line(sys.argv)
 
 if __name__ == "__main__":
