@@ -18,10 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-<<<<<<< HEAD
-    "django.contrib.sites",   # ✅ 必須保留，Allauth 需要
-=======
->>>>>>> recover-tours
+    "django.contrib.sites",   # ✅ Allauth 需要
 
     # 第三方套件
     "allauth",
@@ -39,10 +36,9 @@ INSTALLED_APPS = [
 # ================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",   # ← 加這行
+    "whitenoise.middleware.WhiteNoiseMiddleware",   # ✅ 靜態檔案處理
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # 使用 Django 的 LocaleMiddleware（處理語言切換）
-    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.locale.LocaleMiddleware",   # ✅ 語言切換
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -81,16 +77,12 @@ WSGI_APPLICATION = "eastusatours.wsgi.application"
 # ================
 # 語言 / 國際化
 # ================
-# 預設語言
 LANGUAGE_CODE = "tw"
-
 LANGUAGES = [
     ("tw", "繁體中文"),
     ("cn", "简体中文"),
     ("en", "English"),
 ]
-
-# 語言檔位置
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # ================
@@ -107,43 +99,40 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # ================
-# 靜態檔案
+# 靜態 / 媒體檔案
 # ================
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-<<<<<<< HEAD
-# ---------------------------
-# 媒體檔案設定
-# ---------------------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ✅ 必須保留，否則 allauth 會失敗
+# ✅ Allauth 相關設定
 SITE_ID = 1
-
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-=======
+
 # ================
-# 資料庫設定 (MySQL)
+# （本地可選）MySQL 設定
 # ================
+# 如果要用 SQLite 就不用這段
+# 本地開發用 MySQL 設定
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eastusatours',       # 資料庫名稱
-        'USER': 'django_user',        # 你剛建立的使用者
-        'PASSWORD': 'Django2025!',    # 使用者密碼
-        'HOST': '127.0.0.1',          # 本機測試用
-        'PORT': '3306',               # 預設 MySQL port
+        'NAME': 'eastusatours',
+        'USER': 'django_user',
+        'PASSWORD': 'Django2025!',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
     }
 }
->>>>>>> recover-tours
+
