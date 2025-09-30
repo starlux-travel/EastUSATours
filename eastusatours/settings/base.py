@@ -77,11 +77,13 @@ WSGI_APPLICATION = "eastusatours.wsgi.application"
 # ================
 # 語言 / 國際化
 # ================
-LANGUAGE_CODE = "tw"
+LANGUAGE_CODE = "zh-hant"  # 預設繁中
+
 LANGUAGES = [
-    ("tw", "繁體中文"),
-    ("cn", "简体中文"),
+    ("zh-hant", "繁體中文"),
+    ("zh-hans", "简体中文"),
     ("en", "English"),
+
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
