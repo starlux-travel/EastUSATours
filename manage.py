@@ -8,7 +8,8 @@ def main():
     BASE_DIR = Path(__file__).resolve().parent
     sys.path.append(str(BASE_DIR))   # 確保 eastusatours package 能被找到
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eastusatours.settings.base")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eastusatours.settings.production")
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
