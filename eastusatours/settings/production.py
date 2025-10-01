@@ -8,13 +8,15 @@ from .base import *
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "eastusatours.onrender.com",
-    os.getenv("RENDER_EXTERNAL_HOSTNAME", ""),
+    "eastusatours.onrender.com",  # Render 預設網址
+    "eastusatours.com",           # 你的自訂網域
+    "www.eastusatours.com",       # 建議也加上 www
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://eastusatours.onrender.com",
-    f"https://{os.getenv('RENDER_EXTERNAL_HOSTNAME', '')}",
+    "https://eastusatours.com",
+    "https://www.eastusatours.com",
 ]
 
 # ---------------------------
