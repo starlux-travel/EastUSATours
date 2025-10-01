@@ -8,15 +8,19 @@ from .base import *
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "eastusatours.onrender.com",  # Render 預設網址
-    "eastusatours.com",           # 你的自訂網域
-    "www.eastusatours.com",       # 建議也加上 www
+    "eastusatours.onrender.com",
+    "eastusatours.com",
+    "www.eastusatours.com",
+    "127.0.0.1",
+    "localhost",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://eastusatours.onrender.com",
     "https://eastusatours.com",
     "https://www.eastusatours.com",
+    "http://eastusatours.com",
+    "http://www.eastusatours.com",
 ]
 
 # ---------------------------
